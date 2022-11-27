@@ -1,0 +1,22 @@
+<div class="row">
+    {% for i in range(0, 3) %}
+    <div class="col-lg-4 mb-4 mb-lg-0">
+        <div class="card">
+            {% for j in range(0, data|length) %}
+            {% if j % 3 == i %}
+
+            <img src="http://drive.google.com/uc?export=view&id={{data[j]['model_urlImage']}}"
+                class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+            <div class="card-body">
+                <h5 class="card-title">{{data[j]['model_name']}}</h5>
+                <p class="card-text">
+                    {{data[j]['model_description']}}
+                </p>
+                <!-- <a href="#!" class="btn btn-primary">Button</a> -->
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
