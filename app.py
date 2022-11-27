@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, get_template_attribute, make_response, redirect
+from flask import Flask, render_template, request, jsonify, get_template_attribute, make_response, redirect, url_for
 import numpy as np
 from python.DBMS import Cursor, Database
 from python.person import Person
@@ -37,8 +37,8 @@ def home():
     if not person.defined():
         return redirect("/signin", code=302)
     else:
-        demo = '''
-            <img id="demo-img-car" src="http://drive.google.com/uc?export=view&id=1Z2gn9zjGLk599lp8QKKiP4gO1Q724uI8"
+        demo = f'''
+            <img id="demo-img-car" src="{url_for('static', filename='img/certificate/BMW-cover-edit-8070-1567150808.jpg')}"
                 class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
         '''
         if person.getRole() == 'admin':
@@ -88,7 +88,7 @@ def build():
         form = json.dumps(form)
         Cursor.execute(f"INSERT INTO onlinebookingcar.orderList (components) VALUES ('{form}')")
         Database.commit()
-        return render_template('index.html')
+        return redirect("/build", code=302)
     if request.method == "GET":
         navBarBuild = render_template('build/navbar.html')
         demo = '''
