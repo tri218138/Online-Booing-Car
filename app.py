@@ -14,6 +14,8 @@ class TemplateHTML:
         self.headerHTML = render_template('header.html', role=self.role)
     def setOrderHTML(self, data_):
         self.orderHTML = render_template('order.html', role=self.role, data=data_)
+    def setModelGallery(self, data_):
+        self.modelGallery = render_template('model.html', role=self.role, data=data_)
 
 person = Person()
 templates = TemplateHTML()
@@ -74,10 +76,28 @@ def signin():
 def model():
     if not person.defined():
         return redirect("/signin", code=302)
-    Cursor.execute("SELECT model_urlImage, model_name, model_description FROM onlinebookingcar.car")
-    data = Cursor.fetchall()
-    modelGallery = render_template('model.html', data = data)
-    return render_template('index.html', header=templates.headerHTML, gallery=modelGallery)
+    if person.getRole() == 'admin':
+        if request.method == 'POST':
+            data = request.form.to_dict()
+            if set(('id','model_urlImage','model_name','model_description')).issubset(data):
+                Cursor.execute(f"UPDATE onlinebookingcar.car \
+                    SET model_urlImage = '{data['model_urlImage']}',\
+                        model_name = '{data['model_name']}',\
+                        model_description = '{data['model_description']}'\
+                    WHERE id = '{data['id']}';")
+                Database.commit()
+                # print(data)
+            else:
+                print('data already to insert to database:', data)
+
+        Cursor.execute("SELECT id, model_urlImage, model_name, model_description FROM onlinebookingcar.car")
+        data = Cursor.fetchall()
+        templates.setModelGallery(data)
+    else:
+        Cursor.execute("SELECT model_urlImage, model_name, model_description FROM onlinebookingcar.car")
+        data = Cursor.fetchall()
+        templates.setModelGallery(data)
+    return render_template('index.html', header=templates.headerHTML, gallery=templates.modelGallery)
 
 @app.route('/build', methods=['GET','POST'])
 def build():

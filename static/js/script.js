@@ -8,12 +8,12 @@ function show_element(ele){
     ele.style.visibility = 'visible';
 }
 
-function demo_img_car(json){
+function demo_img_car(data){
     // console.log(url_id);
-    let data = json.split('&');
-    let url_id = data[1];
-    let id_component = data[0];
-    userOder.push(id_component);
+    // let data = json.split('&');
+    // let id_component = data[0];
+    let url_id = data;
+    // userOder.push(id_component);
     document.getElementById('demo-img-car').setAttribute('src','http://drive.google.com/uc?export=view&id='+url_id);
 }
 
