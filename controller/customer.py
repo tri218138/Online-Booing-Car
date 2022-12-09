@@ -20,7 +20,20 @@ def auth():
 # @login_required
 def home():
     header = render_template('component/header.html')
-    content = render_template('layout/0.html', header=header)
+    content = render_template('layout/1.html', header=header)
+    return render_template('index.html', content=content)
+
+@customer_bp.route('/model', methods=['GET', 'POST'])
+def model():
+    if request.method == 'POST':
+        pass
+    data = {
+        "models": dbms.getModelsDetail()
+    }
+    print(data)
+    header = render_template('component/header.html')
+    model = render_template('component/model.html', data= data)
+    content = render_template('layout/1.html', header=header, content=model)
     return render_template('index.html', content=content)
 
 @customer_bp.errorhandler(404)

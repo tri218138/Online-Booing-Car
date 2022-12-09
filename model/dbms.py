@@ -31,18 +31,15 @@ class DBMS:
                 return {"status": True, "id": data["empID"], "role": role}
             else:
                 return {"status": False}
+    def getModelsDetail(self):
+        self.Cursor.execute("SELECT * FROM bwm.car")
+        data = self.Cursor.fetchall()
+        return data
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
     #             class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
     #     '''
-    # def getModelsDetail(self, role):
-    #     if role == 'admin':
-    #         self.Cursor.execute("SELECT id, model_urlImage, model_name, model_description FROM onlinebookingcar.car")
-    #         return self.Cursor.fetchall()
-    #     elif role == 'user':
-    #         self.Cursor.execute("SELECT model_urlImage, model_name, model_description FROM onlinebookingcar.car")
-    #         return self.Cursor.fetchall()
     # def updateModelDetail(self, model_id, data):
     #     self.Cursor.execute(f"UPDATE onlinebookingcar.car \
     #                 SET model_urlImage = '{data['model_urlImage']}',\
