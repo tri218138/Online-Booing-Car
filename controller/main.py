@@ -3,53 +3,50 @@ from model.dbms import dbms
 
 main_bp = Blueprint('main_bp', __name__)
 
-sessionCode = [] # {"idlogin": "", "username": "", "role": ""}
+TOKEN = []
+
+def defineToken(idlogin):
+    for auth in TOKEN:
+        if idlogin == auth["idlogin"]:
+            return True, auth
+    return False, None
 
 @main_bp.before_request
 def auth():
-    print("before request")
-    print(session) # <SecureCookieSession {'idlogin': 'backofficer'}>
-    print(request.endpoint) # main_bp.login
-    print(request.path) # /login
-    if request.endpoint == 'main_bp.login': 
-        return 
-    if request.endpoint == 'main_bp.signup': 
-        return 
+    if request.endpoint == 'main_bp.login':
+        return
     if 'idlogin' not in session:
-        return redirect('login')
-    exists = False
-    for auth in sessionCode:
-        if session['idlogin'] == auth["idlogin"]:
-            exists = True
-            g.user = auth
-    if not exists:
-        return redirect('/login', code = 302)
+        return redirect(url_for('main_bp.login'))
+    global auth
+    sign, auth = defineToken(session["idlogin"])
+    if not sign:
+        return redirect(url_for('main_bp.login'))
 
 @main_bp.route('/', methods=['GET', 'POST'])
 @main_bp.route('/home', methods=['GET', 'POST'])
 # @login_required
 def home():
     header = render_template('component/header.html')
-    content = render_template('layout/container.html', header=header)
+    content = render_template('layout/1.html', header=header)
     return render_template('index.html', content=content)
 
 @main_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
-        try:
-            data = request.form.to_dict()
-            if data["username"] == "" or data["password"] == "":
-                raise Exception("You need to fulfill all input")
-            username, role = dbms.checkSignin(data["username"], data["password"])
-            session["idlogin"] = username
-            sessionCode.append({"idlogin": username, "username" : username, "role": role})
-            return redirect(url_for('customer_bp.home'))
-        except Exception as e: 
-            loginPage = render_template('pages/login.html', check="fail", msg=str(e))
+        req = request.form.to_dict()
+        response = dbms.checkSignin(req["username"], req["password"])
+        if response["status"]:
+            session["username"] = req["username"]
+            session["idlogin"] = response["id"]
+            TOKEN.append({"idlogin": response["id"], "username" : req["username"], "role": response["role"]})
+            return redirect(url_for(f'{response["role"]}_bp.home'))
+        else:
+            data = {
+                "status": "fail"
+            }
+            loginPage = render_template('pages/login.html', data= data)
             return render_template('index.html', content = loginPage)        
 
-    elif request.method == 'GET':
-        pass
     loginPage = render_template('pages/login.html')
     return render_template('index.html', content=loginPage)
 
@@ -70,7 +67,7 @@ def signup():
                 raise Exception("Length of password and username must be at least 6")
             username, role = dbms.signUpCustomer(username,password,address,phonenumber,name,1)
             session["idlogin"] = username
-            sessionCode.append({"idlogin": username, "username" : username, "role": role})
+            TOKEN.append({"idlogin": username, "username" : username, "role": role})
             return redirect(url_for('customer_bp.home'))
         except Exception as e: 
             signupPage = render_template('pages/signup.html', check="fail", msg=str(e))
@@ -82,7 +79,7 @@ def signup():
     return render_template('index.html', content=signupPage)
 
 
-@main_bp.route('/personal-infomation', methods=['GET', 'POST'])
+@main_bp.route('/profile', methods=['GET', 'POST'])
 def personalInfomation():
     pass
 

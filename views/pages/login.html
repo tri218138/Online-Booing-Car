@@ -20,13 +20,13 @@
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="username">Username</label>
                                         <input type="text" id="username" name="username" class="form-control"
-                                            placeholder="Enter your username" />
+                                            placeholder="Enter your username" required/>
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="password">Password</label>
                                         <input type="password" id="password" name="password" class="form-control" 
-                                            placeholder="Enter your password"/>
+                                            placeholder="Enter your password" required/>
                                     </div>
 
                                     <div class="text-center pt-1 mb-3 pb-1">
@@ -34,7 +34,7 @@
                                         <!-- <a class="text-muted" href="#!">Forgot password?</a> -->
                                     </div>
 
-                                    {% if check == 'fail' %}
+                                    {% if data and data["status"] == 'fail' %}%}
                                         <div class="text-center pt-1 mb-3 pb-1">
                                             <h6 class="mb-3" style="color:rgb(217, 127, 127);">{% print msg %}</h4>
                                         </div>
