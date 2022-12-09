@@ -1,6 +1,6 @@
 {% set role = request.blueprint[:-3] %}
 <!-- {% print role %} # customer -->
-{% if role == "customer" %}
+{% if role in ["customer"] %}
 <header>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">

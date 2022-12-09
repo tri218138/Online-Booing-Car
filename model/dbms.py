@@ -3,7 +3,6 @@ import json
 import itertools
 import bcrypt
 
-from model.database import *
 
 Database = pymysql.connect(
     host="localhost",
@@ -29,27 +28,27 @@ class DBMS:
         
     # Log in sign up 
     
-    def checkSignin(self, username, password):
-        password  = password.encode('utf-8')
-        sql ="SELECT username, password FROM CusAccount WHERE username = %s"
-        Cursor.execute(sql, username)
-        cus = Cursor.fetchall()
-        if (len(cus) == 1):
-            cus = cus[0]
-            if bcrypt.checkpw(password,cus["password"].encode('utf-8')):
-                return username, "customer"
-            else :
-                raise Exception("Invalid password or username")
-        sql ="SELECT username, password,typejob FROM Account A , Employee E WHERE username = %s AND A.empID = E.id"
-        Cursor.execute(sql, username)
-        cus = Cursor.fetchall()        
-        if (len(cus) == 1):
-            cus = cus[0]
-            if bcrypt.checkpw(password, cus["password"].encode('utf-8')):
-                return username,  cus["typejob"].lower()
-            else :
-                raise Exception("Invalid password or username")           
-        raise Exception("Username does not exist")           
+    # def checkSignin(self, username, password):
+    #     password  = password.encode('utf-8')
+    #     sql ="SELECT username, password FROM CusAccount WHERE username = %s"
+    #     Cursor.execute(sql, username)
+    #     cus = Cursor.fetchall()
+    #     if (len(cus) == 1):
+    #         cus = cus[0]
+    #         if bcrypt.checkpw(password,cus["password"].encode('utf-8')):
+    #             return username, "customer"
+    #         else :
+    #             raise Exception("Invalid password or username")
+    #     sql ="SELECT username, password,typejob FROM Account A , Employee E WHERE username = %s AND A.empID = E.id"
+    #     Cursor.execute(sql, username)
+    #     cus = Cursor.fetchall()        
+    #     if (len(cus) == 1):
+    #         cus = cus[0]
+    #         if bcrypt.checkpw(password, cus["password"].encode('utf-8')):
+    #             return username,  cus["typejob"].lower()
+    #         else :
+    #             raise Exception("Invalid password or username")           
+    #     raise Exception("Username does not exist")           
 
         
     def signUpCustomer(self, username, password, address, phonenumber, name, BA_ID):
@@ -75,47 +74,80 @@ class DBMS:
       
     # END log in sign up
     
-    def getDemoImage(self):
-        return f'''
-            <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
-                class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
-        '''
-    def getModelsDetail(self, role):
-        if role == 'admin':
-            Cursor.execute("SELECT id, model_urlImage, model_name, model_description FROM onlinebookingcar.car")
-            return Cursor.fetchall()
-        elif role == 'user':
-            Cursor.execute("SELECT model_urlImage, model_name, model_description FROM onlinebookingcar.car")
-            return Cursor.fetchall()
-    def updateModelDetail(self, model_id, data):
-        Cursor.execute(f"UPDATE onlinebookingcar.car \
-                    SET model_urlImage = '{data['model_urlImage']}',\
-                        model_name = '{data['model_name']}',\
-                        model_description = '{data['model_description']}'\
-                    WHERE id = '{data['id']}';")
-    def addOrder(self, data):
-        Cursor.execute(f"INSERT INTO onlinebookingcar.orderList (components) VALUES ('{data}')")
-
-    def getDesignComponent(self):
-        Cursor.execute("SELECT id,component_name,component_description,urlImage FROM onlinebookingcar.component WHERE component_type = 'design'")
-        return Cursor.fetchall()
-    def getInteriorComponent(self):
-        Cursor.execute("SELECT id,component_name,component_description,urlImage FROM onlinebookingcar.component WHERE component_type = 'interior'")
-        return Cursor.fetchall()
-    def getOrderList(self, role):
-        if role == 'user':
-            dataOrderList = [{
-                'orderID': 'SOFA1XQ',
-                'design': 'design1',
-                'exterior' : 'exterior2',
-                'interior' : 'interior1',
-                'orderTime' : '15/12/2022'
-            }]
-            return dataOrderList
+    # def getDemoImage(self):
+    #     return f'''
+    #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
+    #             class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+    #     '''
+    # def getModelsDetail(self, role):
+    #     if role == 'admin':
+    #         Cursor.execute("SELECT id, model_urlImage, model_name, model_description FROM onlinebookingcar.car")
+    #         return Cursor.fetchall()
+    #     elif role == 'user':
+    #         Cursor.execute("SELECT model_urlImage, model_name, model_description FROM onlinebookingcar.car")
+    #         return Cursor.fetchall()
+    # def updateModelDetail(self, model_id, data):
+    #     Cursor.execute(f"UPDATE onlinebookingcar.car \
+    #                 SET model_urlImage = '{data['model_urlImage']}',\
+    #                     model_name = '{data['model_name']}',\
+    #                     model_description = '{data['model_description']}'\
+    #                 WHERE id = '{data['id']}';")
+    # def addOrder(self, data):
+    #     Cursor.execute(f"INSERT INTO onlinebookingcar.orderList (components) VALUES ('{data}')")
+    def checkSignin(self, un, ps):
+        self.Cursor.execute(f"SELECT * FROM bwm.cusaccount WHERE username = '{un}' AND password = '{ps}'" )
+        data = self.Cursor.fetchone() # {}
+        if len(data) > 0:
+            return {"status": True, "id": data["cusID"], "role": "customer"}
         else:
-            Cursor.execute("SELECT * FROM orderList")
-            return Cursor.fetchall()
-    def removeOrder(self, data_):
-        Cursor.execute(f"DELETE FROM onlinebookingcar.orderList WHERE orderID = '{data_['orderID']}'")
+            self.Cursor.execute(f"SELECT * FROM bwm.account WHERE username = '{un}' AND password = '{ps}'" )
+            data = self.Cursor.fetchone() # {}
+            if len(data) > 0:
+                empID = data["empID"]
+                self.Cursor.execute(f"SELECT * FROM bwm.employee WHERE id = '{empID}'" )
+                data = self.Cursor.fetchone() # {}
+                role = data["typejob"].lower()
+                return {"status": True, "id": data["empID"], "role": role}
+            else:
+                return {"status": False}
+    def getModelsDetail(self):
+        self.Cursor.execute("SELECT * FROM bwm.car")
+        data = self.Cursor.fetchall()
+        return data
+    # def getDemoImage(self):
+    #     return f'''
+    #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
+    #             class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+    #     '''
+    # def updateModelDetail(self, model_id, data):
+    #     self.Cursor.execute(f"UPDATE onlinebookingcar.car \
+    #                 SET model_urlImage = '{data['model_urlImage']}',\
+    #                     model_name = '{data['model_name']}',\
+    #                     model_description = '{data['model_description']}'\
+    #                 WHERE id = '{data['id']}';")
+    # def addOrder(self, data):
+    #     self.Cursor.execute(f"INSERT INTO onlinebookingcar.orderList (components) VALUES ('{data}')")
+
+    # def getDesignComponent(self):
+    #     self.Cursor.execute("SELECT id,component_name,component_description,urlImage FROM onlinebookingcar.component WHERE component_type = 'design'")
+    #     return self.Cursor.fetchall()
+    # def getInteriorComponent(self):
+    #     self.Cursor.execute("SELECT id,component_name,component_description,urlImage FROM onlinebookingcar.component WHERE component_type = 'interior'")
+    #     return self.Cursor.fetchall()
+    # def getOrderList(self, role):
+    #     if role == 'user':
+    #         dataOrderList = [{
+    #             'orderID': 'SOFA1XQ',
+    #             'design': 'design1',
+    #             'exterior' : 'exterior2',
+    #             'interior' : 'interior1',
+    #             'orderTime' : '15/12/2022'
+    #         }]
+    #         return dataOrderList
+    #     else:
+    #         self.Cursor.execute("SELECT * FROM orderList")
+    #         return self.Cursor.fetchall()
+    # def removeOrder(self, data_):
+    #     self.Cursor.execute(f"DELETE FROM onlinebookingcar.orderList WHERE orderID = '{data_['orderID']}'")
         
 dbms = DBMS()

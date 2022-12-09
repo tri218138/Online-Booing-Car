@@ -74,18 +74,20 @@
 
 <!-- {% print role %} # customer -->
 {% if role == "customer" %}
+{% set models = data["models"] %}
 <div class="row">
     {% for i in range(0, 3) %}
     <div class="col-lg-4 mb-4 mb-lg-0">
         <div class="card">
-            {% for j in range(0, data|length) %}
+            {% for j in range(0, models|length) %}
             {% if j % 3 == i %}
-            <img src="http://drive.google.com/uc?export=view&id={{data[j]['model_urlImage']}}"
+            {% set model = models[j] %}
+            <img src="model['url']"
                 class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
             <div class="card-body">
-                <h5 class="card-title">{{data[j]['model_name']}}</h5>
+                <h5 class="card-title">{{model['branch']}}</h5>
                 <p class="card-text">
-                    {{data[j]['model_description']}}
+                    {{model['price']}}
                 </p>
                 <!-- <a href="#!" class="btn btn-primary">Button</a> -->
             </div>
