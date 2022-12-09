@@ -1,14 +1,15 @@
 import pymysql.cursors
 import json
 import itertools
+import bcrypt
 
 from model.database import *
 
 Database = pymysql.connect(
     host="localhost",
     user="root",
-    password="280818",
-    database="onlinebookingcar",
+    password="",
+    database="BWM",
     cursorclass=pymysql.cursors.DictCursor
 )
 Cursor = Database.cursor()
@@ -18,18 +19,62 @@ class DBMS:
         self.Database = pymysql.connect(
             host="localhost",
             user="root",
-            password="280818",
-            database="onlinebookingcar",
+            password="",
+            database="BWM",
             cursorclass=pymysql.cursors.DictCursor
         )
         self.Cursor = self.Database.cursor()
     def store(self):
         self.Database.commit()
-    def checkSignin(self, un, ps):
-        if un == 'admin' and ps == 'admin':
-            return True, 'admin0', 'admin'
-        else:
-            return True, 'user1', 'user'
+        
+    # Log in sign up 
+    
+    def checkSignin(self, username, password):
+        password  = password.encode('utf-8')
+        sql ="SELECT username, password FROM CusAccount WHERE username = %s"
+        Cursor.execute(sql, username)
+        cus = Cursor.fetchall()
+        if (len(cus) == 1):
+            cus = cus[0]
+            if bcrypt.checkpw(password,cus["password"].encode('utf-8')):
+                return username, "customer"
+            else :
+                raise Exception("Invalid password or username")
+        sql ="SELECT username, password,typejob FROM Account A , Employee E WHERE username = %s AND A.empID = E.id"
+        Cursor.execute(sql, username)
+        cus = Cursor.fetchall()        
+        if (len(cus) == 1):
+            cus = cus[0]
+            if bcrypt.checkpw(password, cus["password"].encode('utf-8')):
+                return username,  cus["typejob"].lower()
+            else :
+                raise Exception("Invalid password or username")           
+        raise Exception("Username does not exist")           
+
+        
+    def signUpCustomer(self, username, password, address, phonenumber, name, BA_ID):
+        # generating the salt
+        salt = bcrypt.gensalt()
+        bytes = password.encode('utf-8')
+        password = bcrypt.hashpw(bytes, salt).decode('utf-8')
+        sql = "SELECT username FROM Account WHERE username = %s UNION SELECT username FROM CusAccount WHERE username = %s"
+        Cursor.execute(sql, (username, username))
+        existedAccount = Cursor.fetchall()       
+        print(existedAccount)
+        if (len(existedAccount) != 0):
+            raise Exception("This username has been used!") 
+        sql = "INSERT INTO Customer(address,phonenumber,name, BA_ID) VALUES(%s,%s,%s,1)"
+        Cursor.execute(sql, (address, phonenumber,name))
+        Database.commit()
+        newCusID = Cursor.lastrowid
+        sql = "INSERT INTO CusAccount(username, password, cusID) VALUES(%s,%s,%s)"
+        Cursor.execute(sql, (username, password ,newCusID))
+        Database.commit()
+        return username, "customer"      
+    
+      
+    # END log in sign up
+    
     def getDemoImage(self):
         return f'''
             <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
