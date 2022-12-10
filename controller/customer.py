@@ -43,6 +43,7 @@ def model():
     content = render_template('layout/1.html', header=header, content=model, footer=footer)
     return render_template('index.html', content=content)
 
+import re
 @customer_bp.route('/model/detail', methods=['GET', 'POST'])
 def detail():
     data = {}
@@ -51,6 +52,9 @@ def detail():
         if "id" in req:
             # data["car"] = dbms.selectModelById(req["id"]) #use later
             data["car"] = dbms.selectModelById('1') #use later
+        if "angle" in req:
+            data["car"]["url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["url"])
+            print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     detail = render_template('component/detail.html', data= data)

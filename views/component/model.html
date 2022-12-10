@@ -1,4 +1,4 @@
-{% set role = request.blueprint[:-3] %}
+{% set role = request.blueprint.split('.')[0][:-3] %}
 
 {% if role in ["manager"] %}
 

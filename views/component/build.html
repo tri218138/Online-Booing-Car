@@ -1,4 +1,4 @@
-{% set role = request.blueprint[:-3] %}
+{% set role = request.blueprint.split('.')[0][:-3] %}
 <!-- {% print role %} # customer -->
 {% if role in ["customer"] %}
 <div class="container-fluid" style="height: 100%;">

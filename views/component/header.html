@@ -1,5 +1,5 @@
-{% set role = request.blueprint[:-3] %}
-<!-- {% print role %} # customer -->
+{% set role = request.blueprint.split('.')[0][:-3] %}
+<!-- {% print role %} -->
 {% if role in ["customer", "leader"] %}
 <header>
     <!-- Navbar -->
@@ -47,7 +47,7 @@
             <div class="d-flex align-items-center">
                 <!-- Notifications -->
                 <div class="dropdown">
-                    <a class="btn btn-info dropdown-toggle" type="button" id="bussiness_order" data-toggle="dropdown"
+                    <a class="btn dropdown-toggle" type="button" id="bussiness_order" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" href="#">
                         <img src="https://cdn-icons-png.flaticon.com/512/3500/3500833.png" class="rounded-circle"
                             height="25" alt="Black and White Portrait of a Man" loading="lazy" />
@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <a class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    <a class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" href="#">
                         <img src="https://cdn-icons-png.flaticon.com/512/4333/4333609.png" class="rounded-circle"
                             height="25" alt="Black and White Portrait of a Man" loading="lazy" />

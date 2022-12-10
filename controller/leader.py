@@ -24,6 +24,21 @@ def home():
     content = render_template('layout/1.html', header=header,content=content)
     return render_template('index.html', content=content)
 
+order_bp = Blueprint('order_bp', __name__, template_folder="./views")
+leader_bp.register_blueprint(order_bp, url_prefix='/order')
+@order_bp.route('/customer', methods=['GET', 'POST'])
+def orderCustomer():
+    header = render_template('component/header.html')
+    content = """<h1>Trang mà leader nhận các đơn đặt ô tô của khách hàng, sau đó khởi động cho manager quản lý</h1>"""
+    content = render_template('layout/1.html', header=header, content = content)
+    return render_template('index.html', content=content)
+@order_bp.route('/supplier', methods=['GET', 'POST'])
+def orderSupplier():
+    header = render_template('component/header.html')
+    content = """<h1>Trang mà leader đang đại diện doanh nghiệp đặt hàng nhà cung cấp</h1>"""
+    content = render_template('layout/1.html', header=header, content = content)
+    return render_template('index.html', content=content)
+
 @leader_bp.errorhandler(404)
 def page_not_found(e):
     return redirect(url_for('leader_bp.home'))
