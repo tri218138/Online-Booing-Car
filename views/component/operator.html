@@ -1,0 +1,56 @@
+{% set role = request.blueprint[:-3] %}
+<!-- {% print role %} # customer -->
+{% if role in ["customer"] %}
+<style>
+    input[type="radio"]:checked+label {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    input[type="radio"]:disabled+label {
+        background-color: gray;
+    }
+</style>
+<form action="/{{role}}/build" method="post" id="formOder">
+    <div style="position: relative; overflow-y: scroll; height: 70vh;">
+        <div class="list-group list-group-checkable d-grid gap-2 border-0 w-auto" id="design">
+            <legend>Design</legend>
+            {% for design in data["design"] %}
+            <input class="list-group-item-check pe-none" style="opacity: 0;" type="radio" name="design"
+                id='{{design["id"]}}' value='{{design["id"]}}' onclick="demo_img_car(`{{design['url']}}`)">
+            <label class="list-group-item rounded-3 py-3" for='{{design["id"]}}'>
+                {{design["name"]}}
+                <span class="d-block small opacity-50">{{design["description"]}}</span>
+            </label>
+            {% endfor %}
+        </div>
+
+        <div class="list-group list-group-checkable d-grid gap-2 border-0 w-auto" id="design">
+            <legend>Ngoại thất</legend>
+            {% for exterior in data["exterior"] %}
+            <input class="list-group-item-check pe-none" style="opacity: 0;" type="radio" name="exterior"
+                id='{{exterior["id"]}}' value='{{exterior["id"]}}' onclick="demo_img_car(`{{exterior['url']}}`)">
+            <label class="list-group-item rounded-3 py-3" for='{{exterior["id"]}}'>
+                {{exterior["name"]}}
+                <span class="d-block small opacity-50">{{exterior["description"]}}</span>
+            </label>
+            {% endfor %}
+        </div>
+
+        <div class="list-group list-group-checkable d-grid gap-2 border-0 w-auto" id="interior">
+            <legend>Interior</legend>
+            {% for i in range(0, data["interior"]|length) %}
+            <input class="list-group-item-check pe-none" type="radio" name="interior" id='{{data["interior"][i]["id"]}}'
+                value='{{data["interior"][i]["id"]}}' onclick="demo_img_car(`{{data['interior'][i]['urlImage']}}`)">
+            <label class="list-group-item rounded-3 py-3" for='{{data["interior"][i]["id"]}}'>
+                {{data["interior"][i]["component_name"]}}
+                <span class="d-block small opacity-50">{{data["interior"][i]["component_description"]}}</span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <input type="submit" style="margin: 10px;" class="btn btn-primary btn-lg" form="formOder" value="Đặt hàng">
+</form>
+
+{% endif %}

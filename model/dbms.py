@@ -35,6 +35,17 @@ class DBMS:
         self.Cursor.execute("SELECT * FROM bwm.car")
         data = self.Cursor.fetchall()
         return data
+    def selectComponentByType(self, type):
+        self.Cursor.execute(f"SELECT * FROM bwm.component WHERE type = '{type}'")
+        data = self.Cursor.fetchall()
+        for d in data:
+            d["description"] = d["desciption"]
+        return data
+    def selectComponentById(self, id):
+        self.Cursor.execute(f"SELECT * FROM bwm.component WHERE id = '{id}'")
+        data = self.Cursor.fetchone()
+        data["description"] = data["desciption"]
+        return data
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
@@ -72,3 +83,5 @@ class DBMS:
     #     self.Cursor.execute(f"DELETE FROM onlinebookingcar.orderList WHERE orderID = '{data_['orderID']}'")
         
 dbms = DBMS()
+
+# $12$YsUHM2Huyh6.v09SMRIqJOhQc9P9YFIh8g8xDqvjfx0FUghxaR33S
