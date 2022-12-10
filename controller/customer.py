@@ -24,8 +24,9 @@ def home():
     }
     print(data)
     header = render_template('component/header.html')
+    footer = render_template('component/footer.html')
     home = render_template('pages/home.html', data=data)
-    content = render_template('layout/3.html', header=header, content=home)
+    content = render_template('layout/3.html', header=header, content=home, footer=footer)
     return render_template('index.html', content=content)
 
 @customer_bp.route('/model', methods=['GET', 'POST'])
@@ -37,8 +38,9 @@ def model():
     }
     print(data)
     header = render_template('component/header.html')
+    footer = render_template('component/footer.html')
     model = render_template('component/model.html', data= data)
-    content = render_template('layout/1.html', header=header, content=model)
+    content = render_template('layout/1.html', header=header, content=model, footer=footer)
     return render_template('index.html', content=content)
 
 @customer_bp.route('/model/detail', methods=['GET', 'POST'])
@@ -50,8 +52,9 @@ def detail():
             # data["car"] = dbms.selectModelById(req["id"]) #use later
             data["car"] = dbms.selectModelById('1') #use later
     header = render_template('component/header.html')
+    footer = render_template('component/footer.html')
     detail = render_template('component/detail.html', data= data)
-    content = render_template('layout/2.html', header=header, content=detail)
+    content = render_template('layout/2.html', header=header, content=detail, footer=footer)
     return render_template('index.html', content=content)
 
 # @customer_bp.route('/build', methods=['GET','POST'])
@@ -86,8 +89,9 @@ def build():
     data = {}
     print(data)
     header = render_template('component/header.html')
+    footer = render_template('component/footer.html')
     build = render_template('component/build.html', data= data)
-    content = render_template('layout/2.html', header=header, content=build)
+    content = render_template('layout/2.html', header=header, content=build, footer=footer)
     return render_template('index.html', content=content)
 
 @customer_bp.route('/profile', methods=['GET', 'POST'])
@@ -110,7 +114,8 @@ def personalInfomation():
             return redirect(url_for("customer_bp.personalInfomation"))
     container = render_template('component/profile.html', data=data)
     header = render_template('component/header.html')
-    content = render_template('layout/2.html', header=header, content=container)
+    footer = render_template('component/footer.html')
+    content = render_template('layout/2.html', header=header, content=container, footer=footer)
     return render_template('index.html', content=content)
 
 @customer_bp.errorhandler(404)
