@@ -35,26 +35,40 @@ def model():
     model = render_template('component/model.html', data= data)
     content = render_template('layout/1.html', header=header, content=model)
     return render_template('index.html', content=content)
-@customer_bp.route('/build', methods=['GET','POST'])
-def build():
-    data = {
-        "interior": dbms.selectComponentByType("interior"), #[{"":""}]
-        "exterior": dbms.selectComponentByType("exterior")
-    }
-    demo = ""
-    if request.method == "POST":
-        req = request.form.to_dict()
-        print(req)
-        pass
-    if request.method == "GET":
+
+@customer_bp.route('/model/detail', methods=['GET', 'POST'])
+def detail():
+    data = {}
+    if request.method == 'GET':
         req = request.args.to_dict()
-        if "exterior" in req:
-            carComponent = dbms.selectComponentById(req["exterior"])
-            demo = f"""<img src="{carComponent['url']}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />"""
+        if "id" in req:
+            # data["car"] = dbms.selectModelById(req["id"]) #use later
+            data["car"] = dbms.selectModelById('1') #use later
     header = render_template('component/header.html')
-    operator = render_template('component/operator.html', data= data)
-    content = render_template('layout/0.html', header=header, content=demo, operator=operator)
+    detail = render_template('component/detail.html', data= data)
+    content = render_template('layout/2.html', header=header, content=detail)
     return render_template('index.html', content=content)
+
+# @customer_bp.route('/build', methods=['GET','POST'])
+# def build():
+#     data = {
+#         "interior": dbms.selectComponentByType("interior"), #[{"":""}]
+#         "exterior": dbms.selectComponentByType("exterior")
+#     }
+#     demo = ""
+#     if request.method == "POST":
+#         req = request.form.to_dict()
+#         print(req)
+#         pass
+#     if request.method == "GET":
+#         req = request.args.to_dict()
+#         if "exterior" in req:
+#             carComponent = dbms.selectComponentById(req["exterior"])
+#             demo = f"""<img src="{carComponent['url']}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />"""
+#     header = render_template('component/header.html')
+#     operator = render_template('component/operator.html', data= data)
+#     content = render_template('layout/0.html', header=header, content=demo, operator=operator)
+#     return render_template('index.html', content=content)
 
 
 @customer_bp.route('/build', methods=['GET', 'POST'])
@@ -67,6 +81,8 @@ def build():
     build = render_template('component/build.html', data= data)
     content = render_template('layout/2.html', header=header, content=build)
     return render_template('index.html', content=content)
+
+
 
 @customer_bp.errorhandler(404)
 def page_not_found(e):

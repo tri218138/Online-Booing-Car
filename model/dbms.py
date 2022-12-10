@@ -8,7 +8,7 @@ class DBMS:
         self.Database = pymysql.connect(
             host="localhost",
             user="root",
-            password="123456",
+            password="280818",
             database="bwm",
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -45,6 +45,10 @@ class DBMS:
         self.Cursor.execute(f"SELECT * FROM bwm.component WHERE id = '{id}'")
         data = self.Cursor.fetchone()
         data["description"] = data["desciption"]
+        return data
+    def selectModelById(self, id):
+        self.Cursor.execute(f"SELECT * FROM bwm.car WHERE id = '{id}'")
+        data = self.Cursor.fetchone()
         return data
     # def getDemoImage(self):
     #     return f'''

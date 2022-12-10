@@ -29,7 +29,8 @@
         </div>
     </div>
     {% endfor %}
-    <button style="margin: 0 auto;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModelBoard" data-whatever="@mdo">Thêm mẫu ô tô</button>
+    <button style="margin: 0 auto;" type="button" class="btn btn-primary" data-toggle="modal"
+        data-target="#addModelBoard" data-whatever="@mdo">Thêm mẫu ô tô</button>
 </div>
 
 <div class="modal fade" id="addModelBoard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -58,7 +59,8 @@
                     </div>
                     <div class="form-group">
                         <label for="new_model_description" class="col-form-label">Mô tả:</label>
-                        <textarea class="form-control" id="new_model_description" name="new_model_description"></textarea>
+                        <textarea class="form-control" id="new_model_description"
+                            name="new_model_description"></textarea>
                     </div>
                 </form>
             </div>
@@ -78,22 +80,23 @@
 <div class="row">
     {% for i in range(0, 3) %}
     <div class="col-lg-4 mb-4 mb-lg-0">
-        <div class="card">
-            {% for j in range(0, models|length) %}
-            {% if j % 3 == i %}
-            {% set model = models[j] %}
-            <img src="{{model['url']}}"
-                class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
-            <div class="card-body">
-                <h5 class="card-title">{{model['branch']}}</h5>
-                <p class="card-text">
-                    {{model['price']}}
-                </p>
-                <!-- <a href="#!" class="btn btn-primary">Button</a> -->
+        {% for j in range(0, models|length) %}
+        {% if j % 3 == i %}
+        {% set model = models[j] %}
+        <a href="/{{role}}/model/detail?id={{model['id']}}" style="text-decoration: none;">
+            <div class="card">
+                <img src="{{model['url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+                <div class="card-body">
+                    <h5 class="card-title">{{model['branch']}}</h5>
+                    <p class="card-text">
+                        {{model['price']}}
+                    </p>
+                    <!-- <a href="#!" class="btn btn-primary">Button</a> -->
+                </div>
             </div>
-            {% endif %}
-            {% endfor %}
-        </div>
+        </a>
+        {% endif %}
+        {% endfor %}
     </div>
     {% endfor %}
 </div>
