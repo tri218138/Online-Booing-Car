@@ -75,28 +75,144 @@
 <!-- {% print role %} # customer -->
 {% if role == "customer" %}
 {% set models = data["models"] %}
-<div class="row">
-    {% for i in range(0, 3) %}
-    <div class="col-lg-4 mb-4 mb-lg-0">
-        <div class="card">
-            {% for j in range(0, models|length) %}
-            {% if j % 3 == i %}
-            {% set model = models[j] %}
-            <img src="model['url']"
-                class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
-            <div class="card-body">
-                <h5 class="card-title">{{model['branch']}}</h5>
-                <p class="card-text">
-                    {{model['price']}}
-                </p>
-                <!-- <a href="#!" class="btn btn-primary">Button</a> -->
-            </div>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    {% endfor %}
-</div>
+<style>
+    .container-fluid{
+        padding: 0;
+    }
+    .list-group-item{
+        background-color: rgb(242, 242, 242);
+        transition: 0.5s;
+    }
+    .list-group-item:hover{
+        background-color: white;
+    }
+    .select-btn{
+        border-radius: 0px;
+        background-color: #1c69d3;
+        color: white;
+        border: 1px solid #1c69d3;
+        font-weight: bold;
+    }
+    .select-btn:hover{
+        color: #1c69d3;
+        background-color: white;
+    }
+    .car-img img{
+        width: 100%;
+    }
+    .car-img{
+        transition: background-image 1s;
 
+    }
+    .bg{
+        width: 90%;
+        height: 100%;
+        position:absolute;
+        left: 0;
+        top:0;
+        opacity: 0;
+        transition: all 0.9s ease ;
+        z-index: -1;
+    }
+    .list-group-item{
+        padding: 0;
+    }
+</style>
+<!-- <div class="row fluid-width">
+    <div class="col-lg-12 mx-auto"> -->
+        <!-- List group-->
+    <ul class="list-group shadow">
+            <!-- list group item-->
+        <li class="list-group-item">
+            <!-- Custom content-->
+            <div class="row">
+                <div class="col-lg-5 pl-5 pt-4 pb-4 pr-4">
+                    <div class="">
+                        <h5 class="mt-0 font-weight-bold mb-2">Apple iPhone XR (Red, 128 GB)</h5>
+                        <p class="font-italic text-muted mb-0 small">128 GB ROM | 15.49 cm (6.1 inch) Display 12MP Rear Camera | 7MP Front Camera A12 Bionic Chip Processor</p>
+                        <h6 class="font-weight-bold my-2">$64,999</h6>
+                        <ul class="list-inline small">
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star-o text-gray"></i></li>
+                        </ul>
+                        <a href="./detail">
+                            <input class="btn select-btn mt-2 pl-4 pr-4" type="submit" form="login" value="Select">
+                        </a>
+                    </div>
+                </div> 
+                <div class="col-lg-7 car-img">
+                    <img src="https://t4.ftcdn.net/jpg/02/73/81/13/360_F_273811399_Kcgq1GbPC8KAaajcELTxG1bQr5hVLpCW.jpg" alt="Car image"  class="bg">
+                    <img src="https://cache.bmwusa.com/cosy.arox?pov=walkaround&brand=WBBI&vehicle=23II&client=byo&paint=P0C1M&fabric=FSBJG&sa=S01LD,S0248,S0319,S0322,S0330,S0407,S0420,S0494,S04AA,S04NB,S05AC,S05AS,S05AZ,S05DM,S06AC,S06AK,S06C4,S06NX,S06U7,S09T8&date=20220705&angle=40&quality=65&sharp=100&resp=png&BKGND=TRANSPARENT&width=1279" alt="Car image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                </div><!-- End -->
+            </div>
+
+        </li> 
+        <li class="list-group-item">
+            <!-- Custom content-->
+            <div class="row">
+                <div class="col-lg-5 pl-5 pt-4 pb-4 pr-4">
+                    <div class="">
+                        <h5 class="mt-0 font-weight-bold mb-2">Apple iPhone XR (Red, 128 GB)</h5>
+                        <p class="font-italic text-muted mb-0 small">128 GB ROM | 15.49 cm (6.1 inch) Display 12MP Rear Camera | 7MP Front Camera A12 Bionic Chip Processor</p>
+                        <h6 class="font-weight-bold my-2">$64,999</h6>
+                        <ul class="list-inline small">
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                            <li class="list-inline-item m-0"><i class="fa fa-star-o text-gray"></i></li>
+                        </ul>
+                        <a href="./detail">
+                            <input class="btn select-btn mt-2 pl-4 pr-4" type="submit" form="login" value="Select">
+                        </a>
+                    </div>
+                </div> 
+                <div class="col-lg-7 car-img">
+                    <img src="https://t4.ftcdn.net/jpg/02/73/81/13/360_F_273811399_Kcgq1GbPC8KAaajcELTxG1bQr5hVLpCW.jpg" alt="Car image"  class="bg">
+                    <img src="https://cache.bmwusa.com/cosy.arox?pov=walkaround&brand=WBBI&vehicle=23II&client=byo&paint=P0C1M&fabric=FSBJG&sa=S01LD,S0248,S0319,S0322,S0330,S0407,S0420,S0494,S04AA,S04NB,S05AC,S05AS,S05AZ,S05DM,S06AC,S06AK,S06C4,S06NX,S06U7,S09T8&date=20220705&angle=40&quality=65&sharp=100&resp=png&BKGND=TRANSPARENT&width=1279" alt="Car image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                </div><!-- End -->
+            </div>
+
+        </li> 
+    </ul>
+    <!-- </div>
+</div> -->
+<script>
+    var list = document.querySelectorAll('.list-group-item');
+    list.forEach(item=>{
+        const img_default = item.querySelector('.bg');
+        item.addEventListener("mouseover", function() {
+            img_default.style.opacity = 1;
+        });
+        item.addEventListener("mouseout", function() {
+            img_default.style.opacity = 0;
+        });
+    })
+
+</script>
 
 {% endif %}
+
+<!-- {% for i in range(0, 3) %}
+<div class="col-lg-4 mb-4 mb-lg-0">
+    <div class="card">
+        {% for j in range(0, models|length) %}
+        {% if j % 3 == i %}
+        {% set model = models[j] %}
+        <img src='{{model["url"]}}'
+            class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" /> 
+
+        <div class="card-body">
+            <h5 class="card-title">{{model['branch']}}</h5>
+            <p class="card-text">
+                {{model['price']}}
+            </p>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endfor %} -->

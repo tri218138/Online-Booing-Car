@@ -1,0 +1,61 @@
+{% set role = request.blueprint[:-3] %}
+
+
+{% set model = data["car"] %}
+<style>
+    .container-fluid{
+        padding: 0;
+    }
+    .row{
+        padding-top: 80px;
+        background-image: url("https://st.depositphotos.com/1280399/1212/i/950/depositphotos_12125270-stock-photo-white-vintage-paper-texture-grunge.jpg");
+    }
+    .customize-btn{
+        border-radius: 0px;
+        background-color: #353739;
+        color: white;
+        border: 1px solid #353739;
+        font-weight: bold;
+    }
+    .customize-btn:hover{
+        color: #353739;
+        background-color: white;
+    }
+    .car-img img{
+        width: 100%;
+    }
+    .car-img{
+        width: 100%;
+        padding-top: 50px;
+    }
+
+    .list-group-item{
+        padding: 0;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-2 pl-5">
+        <h1 class="font-weight-light">DESIGN YOUR CAR</h3>
+    </div><!-- End -->
+    <div class="col-lg-6 car-img">
+        <img src="https://cache.bmwusa.com/cosy.arox?pov=walkaround&brand=WBBI&vehicle=23II&client=byo&paint=P0C1M&fabric=FSBJG&sa=S01LD,S0248,S0319,S0322,S0330,S0407,S0420,S0494,S04AA,S04NB,S05AC,S05AS,S05AZ,S05DM,S06AC,S06AK,S06C4,S06NX,S06U7,S09T8&date=20220705&angle=40&quality=65&sharp=100&resp=png&BKGND=TRANSPARENT&width=1279" alt="Car image" width="200" class="ml-lg-5 order-1 order-lg-2">
+    </div><!-- End -->
+    <div class="col-lg-3 pl-5 pt-4 pb-4 pr-4">
+        <div class="">
+            <h5 class="mt-0 font-weight-bold mb-2">Apple iPhone XR (Red, 128 GB)</h5>
+            <p class="font-italic text-muted mb-0 small">128 GB ROM | 15.49 cm (6.1 inch) Display 12MP Rear Camera | 7MP Front Camera A12 Bionic Chip Processor</p>
+            <h6 class="font-weight-bold my-2">$64,999</h6>
+            <ul class="list-inline small">
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star-o text-gray"></i></li>
+            </ul>
+            <a href="./detail">
+                <input class="btn customize-btn mt-2 pl-4 pr-4"  value="Customize This Build">
+            </a>
+        </div>
+    </div> 
+
+</div>

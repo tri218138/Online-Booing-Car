@@ -36,6 +36,20 @@ def model():
     content = render_template('layout/1.html', header=header, content=model)
     return render_template('index.html', content=content)
 
+@customer_bp.route('/detail', methods=['GET', 'POST'])
+def detail():
+    if request.method == 'POST':
+        pass
+    carID = request.args['id']
+    data = {
+        "car": dbms.getModelByID(carID)
+    }
+    header = render_template('component/header.html')
+    model = render_template('component/detail.html', data= data)
+    content = render_template('layout/1.html', header=header, content=model)
+    return render_template('index.html', content=content)
+
+
 @customer_bp.errorhandler(404)
 def page_not_found(e):
     return redirect(url_for('customer_bp.home'))
