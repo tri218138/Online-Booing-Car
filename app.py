@@ -4,6 +4,7 @@ from controller.customer import customer_bp
 from controller.manager import manager_bp
 from controller.supplier import supplier_bp
 from controller.designer import designer_bp
+from controller.leader import leader_bp
 
 
 app = Flask(
@@ -17,6 +18,7 @@ app.register_blueprint(customer_bp, url_prefix='/customer')
 app.register_blueprint(manager_bp, url_prefix='/manager')
 app.register_blueprint(supplier_bp, url_prefix='/supplier')
 app.register_blueprint(designer_bp, url_prefix='/designer')
+app.register_blueprint(leader_bp, url_prefix='/leader')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

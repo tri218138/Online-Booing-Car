@@ -1,6 +1,6 @@
 {% set role = request.blueprint[:-3] %}
 <!-- {% print role %} # customer -->
-{% if role in ["customer"] %}
+{% if role in ["customer", "leader"] %}
 <header>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -31,9 +31,13 @@
                     <li class="nav-item" onclick="">
                         <a class=" nav-link" href="/{{role}}/build">Thiết kế ô tô</a>
                     </li>
+                    {% if role == "customer" %}
                     <li class="nav-item">
                         <a class="nav-link" href="/{{role}}/myorder">Đơn hàng của bạn</a>
                     </li>
+                    {% elif role == "leader" %}
+                    
+                    {% endif %}
                 </ul>
                 <!-- Left links -->
             </div>
@@ -42,6 +46,17 @@
             <!-- Right elements -->
             <div class="d-flex align-items-center">
                 <!-- Notifications -->
+                <div class="dropdown">
+                    <a class="btn btn-info dropdown-toggle" type="button" id="bussiness_order" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" href="#">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3500/3500833.png" class="rounded-circle"
+                            height="25" alt="Black and White Portrait of a Man" loading="lazy" />
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="bussiness_order">
+                        <a class="dropdown-item" href="/{{role}}/order/customer">Khách hàng</a>
+                        <a class="dropdown-item" href="/{{role}}/order/supplier">Nhà cung cấp</a>
+                    </div>
+                </div>
                 <div class="dropdown">
                     <a class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" href="#">

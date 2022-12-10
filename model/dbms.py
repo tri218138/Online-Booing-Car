@@ -18,17 +18,17 @@ class DBMS:
     def checkSignin(self, un, ps):
         self.Cursor.execute(f"SELECT * FROM bwm.cusaccount WHERE username = '{un}' AND password = '{ps}'" )
         data = self.Cursor.fetchone() # {}
-        if len(data) > 0:
+        if data is not None:
             return {"status": True, "id": data["cusID"], "role": "customer"}
         else:
             self.Cursor.execute(f"SELECT * FROM bwm.account WHERE username = '{un}' AND password = '{ps}'" )
             data = self.Cursor.fetchone() # {}
-            if len(data) > 0:
+            if len(data) is not None:
                 empID = data["empID"]
                 self.Cursor.execute(f"SELECT * FROM bwm.employee WHERE id = '{empID}'" )
                 data = self.Cursor.fetchone() # {}
                 role = data["typejob"].lower()
-                return {"status": True, "id": data["empID"], "role": role}
+                return {"status": True, "id": empID, "role": role}
             else:
                 return {"status": False}
     def getModelsDetail(self):
