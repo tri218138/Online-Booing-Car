@@ -85,7 +85,28 @@ def build():
     content = render_template('layout/2.html', header=header, content=build)
     return render_template('index.html', content=content)
 
-
+@customer_bp.route('/profile', methods=['GET', 'POST'])
+def personalInfomation():
+    data = {}
+    data["customer"] = dbms.selectCustomerById(auth["idlogin"])
+    data["mode"] = 'view'
+    if request.method == "GET":
+        req = request.args.to_dict()
+        if "mode" in req:
+            if req["mode"] == "edit":
+                data["mode"] = "edit"
+    elif request.method == "POST":
+        req = request.form.to_dict()
+        if req["request"] == "save":
+            # dbms.saveUserName(auth["username"], data=req)
+            print('dbms save')
+            return redirect(url_for("customer_bp.personalInfomation"))
+        elif req["request"] == "cancel":
+            return redirect(url_for("customer_bp.personalInfomation"))
+    container = render_template('component/profile.html', data=data)
+    header = render_template('component/header.html')
+    content = render_template('layout/2.html', header=header, content=container)
+    return render_template('index.html', content=content)
 
 @customer_bp.errorhandler(404)
 def page_not_found(e):

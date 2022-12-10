@@ -50,6 +50,11 @@ class DBMS:
         self.Cursor.execute(f"SELECT * FROM bwm.car WHERE id = '{id}'")
         data = self.Cursor.fetchone()
         return data
+    def selectCustomerById(self, id):
+        self.Cursor.execute(f"SELECT * FROM bwm.customer WHERE id = '{id}'")
+        data = self.Cursor.fetchone()
+        data["phone"] = data["phonenumber"]
+        return data
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
