@@ -1,3 +1,6 @@
+{% set role = request.blueprint[:-3] %}
+<!-- {% print role %} # customer -->
+{% if role in ["customer"] %}
 <div class="container-fluid" style="height: 100%;">
     <nav class="navbar sticky-top navbar-light justify-content-center"
         style="border-bottom: 1px solid #cacaca;background-color: #221f1f;">
@@ -24,7 +27,7 @@
         </div>
     </div>
 </div>
-
+{% endif %}
 
 <script>
 

@@ -1,1 +1,9 @@
+{% set role = request.blueprint[:-3] %}
+<!-- {% print role %} # customer -->
+{% if role in ["customer"] %}
+{% set req = request.args.to_dict() %}
 <h1>Thông tin chi tiết của car id</h1>
+<a href="{{ url_for(request.blueprint+'.build', id = req['id']) }}">
+    <button class="btn btn-primary">Đặt</button>
+</a>
+{% endif %}

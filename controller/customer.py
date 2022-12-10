@@ -75,6 +75,9 @@ def detail():
 def build():
     if request.method == 'POST':
         pass
+    elif request.method == 'GET':
+        req = request.args.to_dict()
+        print(req)
     data = {}
     print(data)
     header = render_template('component/header.html')
