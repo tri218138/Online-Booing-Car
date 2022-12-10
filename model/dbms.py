@@ -8,7 +8,7 @@ class DBMS:
         self.Database = pymysql.connect(
             host="localhost",
             user="root",
-            password="280818",
+            password="123456",
             database="bwm",
             cursorclass=pymysql.cursors.DictCursor
         )
