@@ -1,0 +1,49 @@
+{% set role = request.blueprint[:-3] %}
+<!-- {% print role %} # customer -->
+{% if role in ["customer","manager"] %}
+
+<img src="https://www.bmwusa.com/content/dam/bmwusa/common/homepage/fmas/2022-11/desktop/BMW-YEE22-FMA-Homepage-Desktop-v2.jpg"
+    class="rounded mx-auto d-block w-100">
+<!-- Page Content -->
+<div class="container">
+
+    <hr class="mt-2 mb-5">
+
+    <div class="row text-center text-lg-start">
+        {% for model in data["top"] %}
+        <!-- {% print model %} -->
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="#" class="d-block mb-4 h-100">
+                <div class="card">
+                    <img src="{{model['url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+                    <div class="card-body">
+                        <h5 class="card-title">{{model['branch']}}</h5>
+                        <p class="card-text">
+                            {{model['year']}}
+                        </p>
+                        <!-- <a href="#!" class="btn btn-primary">Button</a> -->
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        <!-- <div class="col-lg-3 col-md-4 col-6">
+            <a href="#" class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail" src="https://source.unsplash.com/aob0ukAYfuI/400x300" alt="">
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="#" class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail" src="https://source.unsplash.com/EUfxH-pze7s/400x300" alt="">
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a href="#" class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail" src="https://source.unsplash.com/M185_qYH8vg/400x300" alt="">
+            </a>
+        </div> -->
+    </div>
+
+</div>
+
+{% endif %}

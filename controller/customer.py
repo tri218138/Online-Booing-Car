@@ -19,8 +19,13 @@ def auth():
 @customer_bp.route('/home', methods=['GET', 'POST'])
 # @login_required
 def home():
+    data = {
+        "top": dbms.selectTopKModel(4, 'price')
+    }
+    print(data)
     header = render_template('component/header.html')
-    content = render_template('layout/1.html', header=header)
+    home = render_template('pages/home.html', data=data)
+    content = render_template('layout/3.html', header=header, content=home)
     return render_template('index.html', content=content)
 
 @customer_bp.route('/model', methods=['GET', 'POST'])

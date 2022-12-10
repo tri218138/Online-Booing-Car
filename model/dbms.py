@@ -55,6 +55,12 @@ class DBMS:
         data = self.Cursor.fetchone()
         data["phone"] = data["phonenumber"]
         return data
+
+    def selectTopKModel(self, k, attr):
+        if attr == 'price':
+            self.Cursor.execute(f"SELECT * FROM bwm.car ORDER BY price DESC LIMIT 4")
+            data = self.Cursor.fetchall()
+            return data
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
