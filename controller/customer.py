@@ -57,6 +57,17 @@ def build():
     return render_template('index.html', content=content)
 
 
+@customer_bp.route('/build', methods=['GET', 'POST'])
+def build():
+    if request.method == 'POST':
+        pass
+    data = {}
+    print(data)
+    header = render_template('component/header.html')
+    build = render_template('component/build.html', data= data)
+    content = render_template('layout/2.html', header=header, content=build)
+    return render_template('index.html', content=content)
+
 @customer_bp.errorhandler(404)
 def page_not_found(e):
     return redirect(url_for('customer_bp.home'))
