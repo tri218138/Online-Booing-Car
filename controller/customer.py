@@ -109,10 +109,9 @@ def personalInfomation():
             if req["mode"] == "edit":
                 data["mode"] = "edit"
     elif request.method == "POST":
-        req = request.form.to_dict()
+        req = request.form.to_dict() #{'name': 'Juana Bonhomme', 'email': '', 'phone': '+86-222-233-47688', 'address': '44 Riverside Street', 'request': 'save'}
         if req["request"] == "save":
-            # dbms.saveUserName(auth["username"], data=req)
-            print('dbms save')
+            dbms.saveCustomerProfile(auth["idlogin"], data=req)
             return redirect(url_for("customer_bp.personalInfomation"))
         elif req["request"] == "cancel":
             return redirect(url_for("customer_bp.personalInfomation"))

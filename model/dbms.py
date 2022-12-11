@@ -61,6 +61,15 @@ class DBMS:
             self.Cursor.execute(f"SELECT * FROM bwm.car ORDER BY year DESC LIMIT 4")
             data = self.Cursor.fetchall()
             return data
+
+    def saveCustomerProfile(self, id, data):
+        self.Cursor.execute(f"UPDATE bwm.customer SET \
+                name = '{data['name']}' , \
+                address = '{data['address']}' ,\
+                phonenumber = '{data['phone']}' \
+                WHERE id = '{id}'\
+            ")
+        self.Database.commit()
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
