@@ -75,8 +75,21 @@
 {% endif %}
 
 <!-- {% print role %} # customer -->
-{% if role == "customer" %}
+{% if role in ["customer","leader"] %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light"  style="border-top: 2px solid #eee">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="a">
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{request.path}}/type">SAV</a>
+                <a class="nav-link" href="#">Sedan</a>
+                <a class="nav-link" href="#">Coupe</a>
+                <a class="nav-link" href="#">Electrified</a>
+            </div>
+        </div>
+    </div>
+</nav>
 {% set models = data["models"] %}
+
 <div class="row">
     {% for i in range(0, 3) %}
     <div class="col-lg-4 mb-4 mb-lg-0">
@@ -85,7 +98,7 @@
         {% set model = models[j] %}
         <a href="/{{role}}/model/detail?id={{model['id']}}" style="text-decoration: none;">
             <div class="card">
-                <img src="{{model['url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+                <img src="{{model['img_url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
                 <div class="card-body">
                     <h5 class="card-title">{{model['branch']}}</h5>
                     <p class="card-text">
@@ -100,6 +113,4 @@
     </div>
     {% endfor %}
 </div>
-
-
 {% endif %}

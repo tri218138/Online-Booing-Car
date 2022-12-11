@@ -57,8 +57,8 @@ class DBMS:
         return data
 
     def selectTopKModel(self, k, attr):
-        if attr == 'price':
-            self.Cursor.execute(f"SELECT * FROM bwm.car ORDER BY price DESC LIMIT 4")
+        if attr == 'year':
+            self.Cursor.execute(f"SELECT * FROM bwm.car ORDER BY year DESC LIMIT 4")
             data = self.Cursor.fetchall()
             return data
     # def getDemoImage(self):

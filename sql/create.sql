@@ -57,15 +57,19 @@ CREATE TABLE `Group`(
 );
 ALTER TABLE
     `Group` ADD PRIMARY KEY `group_id_primary`(`id`);
-CREATE TABLE `Car`(
+CREATE TABLE `Car`( 
     `id` INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+    `model_name` VARCHAR(5) NOT NULL,
+    `series_name` VARCHAR(100) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `starting_msrp` DOUBLE UNSIGNED NOT NULL,
+    `shown_msrp` DOUBLE UNSIGNED NULL,
     `mass` DOUBLE UNSIGNED NOT NULL,
     `color` VARCHAR(20) NOT NULL,
-    `price` DOUBLE NOT NULL,
-    `url` VARCHAR(255) NOT NULL,
+    `img_url` VARCHAR(1000) NOT NULL,
+    `wallpaper` VARCHAR(1000) NOT NULL,
     `branch` VARCHAR(20) NOT NULL,
     `year` YEAR NOT NULL,
-    `type` VARCHAR(20) NOT NULL,
     `proID` INT UNSIGNED NOT NULL,
     `startDate` DATE NOT NULL,
     `progress` VARCHAR(20) NOT NULL, -- domain:{to do; in progress, complete} 
@@ -73,6 +77,15 @@ CREATE TABLE `Car`(
 );
 ALTER TABLE
     `Car` ADD PRIMARY KEY `car_id_primary`(`id`);
+    
+CREATE TABLE `faq` (
+	`carid` INT UNSIGNED NOT NULL,
+    `question` VARCHAR(255) NOT NULL,
+    `answer` VARCHAR(500) NOT NULL,
+    PRIMARY KEY(`carid`,`question`,`answer`),
+    FOREIGN KEY(`carid`) REFERENCES `Car`(`id`)
+);
+
 CREATE TABLE `Blueprint`(
     `id` INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
     `url` VARCHAR(255) NOT NULL,
@@ -90,11 +103,10 @@ ALTER TABLE
 
 CREATE TABLE `Component`(
     `id` INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `price` DOUBLE NOT NULL,
-    `desciption` VARCHAR(255) NOT NULL,
     `type` VARCHAR(20) NOT NULL, -- domain: {machine;interior,exterior,null} 
     `name` VARCHAR(20) NOT NULL,
-    `url` VARCHAR(255) NOT NULL,
+    `img_url` VARCHAR(255) NOT NULL,
+    `price` DOUBLE NOT NULL,
     `carID` INT UNSIGNED NOT NULL,
     `supID` INT UNSIGNED NULL,
     `suppliedDate` DATE NULL
@@ -102,36 +114,26 @@ CREATE TABLE `Component`(
 ALTER TABLE
     `Component` ADD PRIMARY KEY `component_id_primary`(`id`);
     
-CREATE TABLE `Machine`(
-    `machineID` INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `machineType` VARCHAR(20) NULL COMMENT '{engine, brake,null}',
-    `engineFuel` VARCHAR(50) NULL,
-    `brakeForce` VARCHAR(50) NULL
-);
-ALTER TABLE
-    `Machine` ADD PRIMARY KEY `machine_machineid_primary`(`machineID`);
-
 CREATE TABLE `Interior`(
     `interiorid` INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `interiorType` VARCHAR(20) NULL COMMENT '{climateControl, Seat, FloorMat}',
-    `climatePower` VARCHAR(20) NULL,
-    `Material` VARCHAR(50) NULL COMMENT 'seat/floormat material',
-    `Color` VARCHAR(20) NULL COMMENT 'seat/floormat color'
+    `interiorType` VARCHAR(20) NULL COMMENT '{upholstery, trim}',
+	`upholstery_type` VARCHAR(50) NULL
 );
 ALTER TABLE
     `Interior` ADD PRIMARY KEY `interior_interiorid_primary`(`interiorid`);
 CREATE TABLE `Exterior`(
     `exteriorID` INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    `exteriorType` VARCHAR(20) NULL COMMENT 'domain:{wheel, glass,null}',
-    `wheelType` VARCHAR(20) NULL,
-    `wheelColor` VARCHAR(20) NULL,
-    `glassMaterial` VARCHAR(50) NULL,
-    `glassNum_layer` INT UNSIGNED NULL,
-    `endurance` VARCHAR(50) NULL
+    `exteriorType` VARCHAR(20) NULL COMMENT 'domain:{wheel, color}',
+	`color_type` VARCHAR(50) NULL,
+	`wheel_desc` VARCHAR(50) NULL,
+	`wheel_range` VARCHAR(50) NULL
 );
 ALTER TABLE
     `Exterior` ADD PRIMARY KEY `exterior_exteriorid_primary`(`exteriorID`);
 
+
+
+-- 
 CREATE TABLE `Automatic_equippment`(
     `id` INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
     `type` VARCHAR(20) NOT NULL,
@@ -207,8 +209,7 @@ ALTER TABLE
     `Component` ADD CONSTRAINT `component_carid_foreign` FOREIGN KEY(`carID`) REFERENCES `Car`(`id`);
 ALTER TABLE
     `Component` ADD CONSTRAINT `component_supid_foreign` FOREIGN KEY(`supID`) REFERENCES `supplier`(`id`);
-ALTER TABLE 
-	`Machine` ADD FOREIGN KEY(`machineID`) REFERENCES `Component`(`id`);
+
 ALTER TABLE
 	`Interior` ADD FOREIGN KEY(`interiorID`) REFERENCES `Component`(`id`);
 ALTER TABLE

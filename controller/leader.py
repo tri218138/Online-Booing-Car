@@ -24,6 +24,20 @@ def home():
     content = render_template('layout/1.html', header=header,content=content)
     return render_template('index.html', content=content)
 
+@leader_bp.route('/model', methods=['GET', 'POST'])
+def model():
+    if request.method == 'POST':
+        pass
+    data = {
+        "models": dbms.getModelsDetail() #[]
+    }
+    # print(data)
+    header = render_template('component/header.html')
+    footer = render_template('component/footer.html')
+    model = render_template('component/model.html', data= data)
+    content = render_template('layout/1.html', header=header, content=model, footer=footer)
+    return render_template('index.html', content=content)
+
 order_bp = Blueprint('order_bp', __name__, template_folder="./views")
 leader_bp.register_blueprint(order_bp, url_prefix='/order')
 @order_bp.route('/customer', methods=['GET', 'POST'])
@@ -38,6 +52,7 @@ def orderSupplier():
     content = """<h1>Trang mà leader đang đại diện doanh nghiệp đặt hàng nhà cung cấp</h1>"""
     content = render_template('layout/1.html', header=header, content = content)
     return render_template('index.html', content=content)
+
 
 @leader_bp.errorhandler(404)
 def page_not_found(e):

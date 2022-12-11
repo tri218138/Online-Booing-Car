@@ -50,7 +50,6 @@ def login():
     loginPage = render_template('pages/login.html')
     return render_template('index.html', content=loginPage)
 
-
 @main_bp.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == "POST":

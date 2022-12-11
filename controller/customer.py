@@ -20,7 +20,7 @@ def auth():
 # @login_required
 def home():
     data = {
-        "top": dbms.selectTopKModel(4, 'price')
+        "top": dbms.selectTopKModel(4, 'year')
     }
     print(data)
     header = render_template('component/header.html')
@@ -53,7 +53,7 @@ def detail():
             # data["car"] = dbms.selectModelById(req["id"]) #use later
             data["car"] = dbms.selectModelById('1') #use later
         if "angle" in req:
-            data["car"]["url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["url"])
+            data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
             print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')

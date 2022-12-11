@@ -46,6 +46,7 @@
             <!-- Right elements -->
             <div class="d-flex align-items-center">
                 <!-- Notifications -->
+                {% if role == "leader" %}
                 <div class="dropdown">
                     <a class="btn dropdown-toggle" type="button" id="bussiness_order" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" href="#">
@@ -57,6 +58,7 @@
                         <a class="dropdown-item" href="/{{role}}/order/supplier">Nhà cung cấp</a>
                     </div>
                 </div>
+                {% endif %}
                 <div class="dropdown">
                     <a class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" href="#">
