@@ -1,7 +1,7 @@
 import pymysql.cursors
 import json
 import itertools
-# from model.database import *
+import bcrypt
 
 class DBMS:
     def __init__(self):
@@ -9,12 +9,81 @@ class DBMS:
             host="localhost",
             user="root",
             password="280818",
-            database="bwm",
+            database="BWM",
             cursorclass=pymysql.cursors.DictCursor
         )
         self.Cursor = self.Database.cursor()
     def store(self):
         self.Database.commit()
+        
+    # Log in sign up 
+    
+    # def checkSignin(self, username, password):
+    #     password  = password.encode('utf-8')
+    #     sql ="SELECT username, password FROM CusAccount WHERE username = %s"
+    #     Cursor.execute(sql, username)
+    #     cus = Cursor.fetchall()
+    #     if (len(cus) == 1):
+    #         cus = cus[0]
+    #         if bcrypt.checkpw(password,cus["password"].encode('utf-8')):
+    #             return username, "customer"
+    #         else :
+    #             raise Exception("Invalid password or username")
+    #     sql ="SELECT username, password,typejob FROM Account A , Employee E WHERE username = %s AND A.empID = E.id"
+    #     Cursor.execute(sql, username)
+    #     cus = Cursor.fetchall()        
+    #     if (len(cus) == 1):
+    #         cus = cus[0]
+    #         if bcrypt.checkpw(password, cus["password"].encode('utf-8')):
+    #             return username,  cus["typejob"].lower()
+    #         else :
+    #             raise Exception("Invalid password or username")           
+    #     raise Exception("Username does not exist")           
+
+        
+    def signUpCustomer(self, username, password, address, phonenumber, name, BA_ID):
+        # generating the salt
+        salt = bcrypt.gensalt()
+        bytes = password.encode('utf-8')
+        password = bcrypt.hashpw(bytes, salt).decode('utf-8')
+        sql = "SELECT username FROM Account WHERE username = %s UNION SELECT username FROM CusAccount WHERE username = %s"
+        self.Cursor.execute(sql, (username, username))
+        existedAccount = self.Cursor.fetchall()       
+        print(existedAccount)
+        if (len(existedAccount) != 0):
+            raise Exception("This username has been used!") 
+        sql = "INSERT INTO Customer(address,phonenumber,name, BA_ID) VALUES(%s,%s,%s,1)"
+        self.Cursor.execute(sql, (address, phonenumber,name))
+        self.Database.commit()
+        newCusID = self.Cursor.lastrowid
+        sql = "INSERT INTO CusAccount(username, password, cusID) VALUES(%s,%s,%s)"
+        self.Cursor.execute(sql, (username, password ,newCusID))
+        self.Database.commit()
+        return username, "customer"      
+    
+      
+    # END log in sign up
+    
+    # def getDemoImage(self):
+    #     return f'''
+    #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
+    #             class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+    #     '''
+    # def getModelsDetail(self, role):
+    #     if role == 'admin':
+    #         Cursor.execute("SELECT id, model_urlImage, model_name, model_description FROM onlinebookingcar.car")
+    #         return Cursor.fetchall()
+    #     elif role == 'user':
+    #         Cursor.execute("SELECT model_urlImage, model_name, model_description FROM onlinebookingcar.car")
+    #         return Cursor.fetchall()
+    # def updateModelDetail(self, model_id, data):
+    #     Cursor.execute(f"UPDATE onlinebookingcar.car \
+    #                 SET model_urlImage = '{data['model_urlImage']}',\
+    #                     model_name = '{data['model_name']}',\
+    #                     model_description = '{data['model_description']}'\
+    #                 WHERE id = '{data['id']}';")
+    # def addOrder(self, data):
+    #     Cursor.execute(f"INSERT INTO onlinebookingcar.orderList (components) VALUES ('{data}')")
     def checkSignin(self, un, ps):
         self.Cursor.execute(f"SELECT * FROM bwm.cusaccount WHERE username = '{un}' AND password = '{ps}'" )
         data = self.Cursor.fetchone() # {}
@@ -114,6 +183,16 @@ class DBMS:
         data = self.Cursor.fetchall()
         return data[0]
 
+    
+    def getModelByID(self, id):
+        self.Cursor.execute("SELECT * FROM bwm.car WHERE id = %s",(id))
+        data = self.Cursor.fetchall()
+        return data[0]
+    
+    def getfaq(self, carid):
+        self.Cursor.execute("SELECT * FROM bwm.faq WHERE carid = %s",(carid))
+        data = self.Cursor.fetchall()
+        return data
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bwm.vn/content/dam/bwm/common/all-models/3-series/sedan/2018/inspire/bwm-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"

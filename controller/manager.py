@@ -1,6 +1,7 @@
-from flask import Blueprint, request, render_template, session, redirect, url_for
+from flask import Blueprint, Response, request, render_template, session, redirect, url_for
 from model.dbms import dbms
 from controller.main import TOKEN, defineToken
+import json
 
 manager_bp = Blueprint('manager_bp', __name__, template_folder="./views")
 
@@ -57,35 +58,59 @@ def model():
 import re
 @manager_bp.route('/model/detail', methods=['GET', 'POST'])
 def detail():
-    data = {}
+    carID = request.args['id']
+    car = dbms.getModelByID(carID)
+    faq= dbms.getfaq(carID)
+    data = {
+        "car": car,
+        "faq": faq
+    }
     if request.method == 'GET':
         req = request.args.to_dict()
-        if "id" in req:
-            data["car"] = dbms.selectModelById(req["id"]) #use later
-            # data["car"] = dbms.selectModelById('1')
         if "angle" in req:
             data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
-            # print(data)
     header = render_template('component/header.html')
-    footer = render_template('component/footer.html')
-    detail = render_template('component/detail.html', data= data)
-    content = render_template('layout/2.html', header=header, content=detail, footer=footer)
+    model = render_template('component/detail.html', data= data)
+    content = render_template('layout/1.html', header=header, content=model)
     return render_template('index.html', content=content)
 
 @manager_bp.route('/build', methods=['GET', 'POST'])
 def build():
     if request.method == 'POST':
-        pass
-    elif request.method == 'GET':
-        req = request.args.to_dict()
-        # print(req)
-    data = {}
-    # print(data)
-    header = render_template('component/header.html')
-    footer = render_template('component/footer.html')
-    build = render_template('component/build.html', data= data)
-    content = render_template('layout/2.html', header=header, content=build, footer=footer)
-    return render_template('index.html', content=content)
+        data = json.loads(request.data)
+        # add database bill
+        return Response('BMW cảm ơn bạn đã đồng hành', 200)
+    else:
+        args = request.args.to_dict()
+        if len(args.values()) == 1:
+            args["type"] = 'Exterior'
+            args["subtype"] = 'Color'
+        data = {}
+        if args["type"] != 'Summary':
+            data = {
+                "component": dbms.getListComponent(int(args['id']), args["type"], args["subtype"]),
+                "url": dbms.getURLCar(int(args['id'])).replace('&angle=40&','&angle=90&'),
+                "type": args["type"],
+                "subtype": args["subtype"]
+            }
+        else:
+            item = ['Color', 'Wheel', 'Upholstery', 'Trim']
+            items = []
+            for i in item:
+                if i in args.keys():
+                    items.append(dbms.getPriceByName(args["Color"], i))
+            data = {
+                "component": [],
+                "url": dbms.getURLCar(int(args['id'])).replace('&angle=40&','&angle=90&'),
+                "type": args["type"],
+                "subtype": args["subtype"],
+                "items": items
+            }
+        print(data)
+        header = render_template('component/header.html')
+        build = render_template('component/build.html', data= data)
+        content = render_template('layout/2.html', header=header, content=build)
+        return render_template('index.html', content=content)
 
 @manager_bp.route('/project', methods=['GET', 'POST'])
 def project():

@@ -56,22 +56,22 @@ def model():
     return render_template('index.html', content=content)
 
 import re
-@customer_bp.route('/model/detail', methods=['GET', 'POST'])
-def detail():
-    data = {}
-    if request.method == 'GET':
-        req = request.args.to_dict()
-        if "id" in req:
-            data["car"] = dbms.selectModelById(req["id"]) #use later
-            # data["car"] = dbms.selectModelById('1')
-        if "angle" in req:
-            data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
-            # print(data)
-    header = render_template('component/header.html')
-    footer = render_template('component/footer.html')
-    detail = render_template('component/detail.html', data= data)
-    content = render_template('layout/2.html', header=header, content=detail, footer=footer)
-    return render_template('index.html', content=content)
+# @customer_bp.route('/model/detail', methods=['GET', 'POST'])
+# def modelDetail():
+#     data = {}
+#     if request.method == 'GET':
+#         req = request.args.to_dict()
+#         if "id" in req:
+#             data["car"] = dbms.selectModelById(req["id"]) #use later
+#             # data["car"] = dbms.selectModelById('1')
+#         if "angle" in req:
+#             data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
+#             # print(data)
+#     header = render_template('component/header.html')
+#     footer = render_template('component/footer.html')
+#     detail = render_template('component/detail.html', data= data)
+#     content = render_template('layout/2.html', header=header, content=detail, footer=footer)
+#     return render_template('index.html', content=content)
 
 @customer_bp.route('/build', methods=['GET', 'POST'])
 def build():
@@ -142,6 +142,25 @@ def personalSetting():
     footer = render_template('component/footer.html')
     content = render_template('layout/2.html', header=header, content=container, footer=footer)
     return render_template('index.html', content=content)
+
+@customer_bp.route('/model/detail', methods=['GET', 'POST'])
+def detail():
+    carID = request.args['id']
+    car = dbms.getModelByID(carID)
+    faq= dbms.getfaq(carID)
+    data = {
+        "car": car,
+        "faq": faq
+    }
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if "angle" in req:
+            data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
+    header = render_template('component/header.html')
+    model = render_template('component/detail.html', data= data)
+    content = render_template('layout/1.html', header=header, content=model)
+    return render_template('index.html', content=content)
+
 
 @customer_bp.errorhandler(404)
 def page_not_found(e):
