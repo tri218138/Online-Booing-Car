@@ -58,7 +58,35 @@ def model():
 import re
 @manager_bp.route('/model/detail', methods=['GET', 'POST'])
 def detail():
-    carID = request.args['id']
+    if request.method == 'GET':
+        carID = request.args['id']
+    elif request.method == 'POST':
+        carID = request.form['id']
+
+    msg = ""
+ 
+    if request.method == 'POST':
+        req = request.form.to_dict()
+        req["year"] = int(req["year"])
+        req["starting_msrp"] = float(req["starting_msrp"])
+        req["mass"] = float(req["mass"])
+        
+        if (not req["model_name"] or not req["series_name"] or not req["title"] or not req["mass"] or not req["starting_msrp"] or not req["branch"] or not req["year"] ):
+            msg = "You need to complete all inputs"
+        elif (req["year"]<0):
+            msg = "Year is invalid"
+        elif (req["starting_msrp"]<0):
+            msg = "Starting price is invalid"
+        elif (req["mass"]<0):
+            msg = "Mass is invalid" 
+        
+        if (msg == ""):
+            msg = dbms.updateCar(carID, req) 
+            if (msg == ""):
+                msg = "Successfully update"             
+
+
+            
     car = dbms.getModelByID(carID)
     faq= dbms.getfaq(carID)
     data = {
@@ -69,10 +97,12 @@ def detail():
         req = request.args.to_dict()
         if "angle" in req:
             data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
+                 
+    data["msg"] = msg       
     header = render_template('component/header.html')
-    model = render_template('component/detail.html', data= data)
-    content = render_template('layout/1.html', header=header, content=model)
-    return render_template('index.html', content=content)
+    model = render_template('component/updateCar.html', data = data)
+    content = render_template('layout/1.html', header = header, content = model)
+    return render_template('index.html', content = content)
 
 @manager_bp.route('/build', methods=['GET', 'POST'])
 def build():

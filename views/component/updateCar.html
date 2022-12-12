@@ -1,0 +1,128 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+
+
+{% set model = data["car"] %}
+{% set faq = data["faq"] %}
+<style>
+    .container-fluid{
+        padding: 0;
+    }
+    .row{
+        padding-top: 80px;
+        background-size: contain;
+        background-image: url("https://st.depositphotos.com/1280399/1212/i/950/depositphotos_12125270-stock-photo-white-vintage-paper-texture-grunge.jpg");
+    }
+    .customize-btn{
+        border-radius: 0px;
+        background-color: #353739;
+        color: white;
+        border: 1px solid #353739;
+        font-weight: bold;
+    }
+    .customize-btn:hover{
+        color: #353739;
+        background-color: white;
+    }
+    .car-img img{
+        width: 100%;
+    }
+    .car-img{
+        width: 100%;
+        padding-top: 50px;
+    }
+    .row-inp{
+        padding: 0;
+    }
+
+    .update-container{
+        border: 3px solid black;
+
+        width: 80%;
+    }
+    /* .list-group-item{
+        padding: 0;
+    } */
+    .form-update{
+        width: 100%;
+        padding: 20px;
+    }
+    label{
+        font-weight: bold;
+    }
+
+
+</style>
+<div class="row">
+    <div class="col-lg-5 car-img pb-4">
+        <img src='{{model["img_url"]}}' alt="Car image" width="200" class="ml-lg-5 order-1 order-lg-2">
+        <form action="{{request.path}}" method="get" style="text-align:center">
+            {% set req = request.args.to_dict()%}
+            <input type="hidden" name="id" value="{{req['id']}}">
+            <input type="range" id="angle" class="form-range" name="angle" min="0" max="180" value="{{req['angle']}}" step="10"
+            onchange="this.form.submit()">
+            <label for="angle">3D car</label>
+        </form>
+    </div><!-- End -->
+
+
+    <div class="col-lg-6 col-right justify-content-center ml-4">
+        <h3 class="font-weight-light text-center pb-3" style="width:80%;">UPDATE CAR INFORMATION</h3>
+        <div class="update-container mb-4 d-flex justify-content-center ">
+            <form class="form-update " action="{{request.path}}" method="post" >
+                <input type="hidden" class="form-control"  name="id" placeholder="" value='{{model["id"]}}'>
+
+                <div class="form-group">
+                  <label for="model_name">Model name</label>
+                  <input type="text" class="form-control"  name="model_name" placeholder="" value='{{model["model_name"]}}'>
+                </div>
+                <div class="form-group">
+                    <label for="series_name">Series name</label>
+                    <input type="text" class="form-control" name="series_name" placeholder="" value='{{model["series_name"]}}'>
+                </div>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <textarea name="title" class="form-control" rows="3">{{model["title"]}}
+                    </textarea>                
+                </div>
+
+                <div class="form-group">
+                    <label for="starting_msrp">Starting price</label>
+                    <input type="number" step=any  class="form-control"  name="starting_msrp" placeholder="" value='{{model["starting_msrp"]}}'>
+                </div>
+                <div class="form-group">
+                    <label for="mass">Mass</label>
+                    <input type="number" class="form-control" name="mass" placeholder="" value='{{model["mass"]}}'>
+                </div>
+
+                <div class="form-group">
+                    <label for="branch">Branch</label>
+                    <input type="text" class="form-control" name="branch" placeholder="" value='{{model["branch"]}}'>                    
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" class="form-control" name="year" placeholder="" value='{{model["year"]}}'>                    
+                </div>
+
+
+                <input class="btn customize-btn mt-2 pl-4 pr-4 mb-3" type="submit"  value="Update">
+
+                {% if (data['msg'] == 'Successfully update'): %}
+                    <p class="text-success font-weight-bold">
+                        {{data["msg"]}}
+                    </p>                   
+                {% else %}
+                    <p class="text-danger font-weight-bold">
+                        {{data["msg"]}}
+                    </p>  
+                {% endif %}
+
+              </form>
+            
+        </div>
+    </div> 
+
+
+
+
+</div>
+

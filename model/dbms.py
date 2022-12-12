@@ -8,7 +8,7 @@ class DBMS:
         self.Database = pymysql.connect(
             host="localhost",
             user="root",
-            password="280818",
+            password="",
             database="BWM",
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -193,6 +193,16 @@ class DBMS:
         self.Cursor.execute("SELECT * FROM bwm.faq WHERE carid = %s",(carid))
         data = self.Cursor.fetchall()
         return data
+    
+    def updateCar(self, carid, data):
+        updateData = (data["model_name"],data["series_name"],data["title"],data["branch"],data["mass"],data["starting_msrp"],data["year"])
+        try: 
+            self.Cursor.execute("UPDATE car SET model_name = %s, series_name = %s, title = %s, branch = %s, mass = %s, starting_msrp = %s, year = %s",updateData)
+            self.Database.commit()           
+        except (pymysql.Error) as e:
+            return e
+
+        return ""
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bwm.vn/content/dam/bwm/common/all-models/3-series/sedan/2018/inspire/bwm-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
