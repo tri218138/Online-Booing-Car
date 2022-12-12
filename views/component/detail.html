@@ -1,6 +1,6 @@
 {% set role = request.blueprint.split('.')[0][:-3] %}
 <!-- {% print role %} # customer -->
-{% if role in ["customer"] %}
+{% if role in ["customer","manager","leader"] %}
 {% set req = request.args.to_dict() %}
 {% set model = data["car"] %}
 <div class="container-fluid">

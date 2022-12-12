@@ -1,6 +1,6 @@
 {% set role = request.blueprint.split('.')[0][:-3] %}
 <!-- {% print role %} -->
-{% if role in ["customer", "leader"] %}
+{% if role in ["customer", "leader", "manager"]: %}
 <header>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,8 +35,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/{{role}}/myorder">Đơn hàng của bạn</a>
                     </li>
-                    {% elif role == "leader" %}
-                    
+                    {% elif role == "manager" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/{{role}}/project">Dự án</a>
+                    </li>
                     {% endif %}
                 </ul>
                 <!-- Left links -->
@@ -46,7 +48,7 @@
             <!-- Right elements -->
             <div class="d-flex align-items-center">
                 <!-- Notifications -->
-                {% if role == "leader" %}
+                {% if role in ["leader"] %}
                 <div class="dropdown">
                     <a class="btn dropdown-toggle" type="button" id="bussiness_order" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" href="#">
