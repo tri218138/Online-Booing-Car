@@ -1,6 +1,7 @@
-from flask import Blueprint, request, render_template, session, redirect, url_for
+from flask import Blueprint, request, Response, render_template, session, redirect, url_for
 from model.dbms import dbms
 from controller.main import TOKEN, defineToken
+import json
 
 customer_bp = Blueprint('customer_bp', __name__, template_folder="./views")
 
@@ -12,7 +13,7 @@ def auth():
         return redirect(url_for('main_bp.login'))
     global auth
     sign, auth = defineToken(session["idlogin"])
-    if not sign:
+    if not sign or auth["role"] != 'customer':
         return redirect(url_for('main_bp.login'))
 
 @customer_bp.route('/', methods=['GET', 'POST'])
@@ -75,17 +76,40 @@ def detail():
 @customer_bp.route('/build', methods=['GET', 'POST'])
 def build():
     if request.method == 'POST':
-        pass
-    elif request.method == 'GET':
-        req = request.args.to_dict()
-        # print(req)
-    data = {}
-    # print(data)
-    header = render_template('component/header.html')
-    footer = render_template('component/footer.html')
-    build = render_template('component/build.html', data= data)
-    content = render_template('layout/2.html', header=header, content=build, footer=footer)
-    return render_template('index.html', content=content)
+        data = json.loads(request.data)
+        # add database bill
+        return Response('BMW cảm ơn bạn đã đồng hành', 200)
+    else:
+        args = request.args.to_dict()
+        if len(args.values()) == 1:
+            args["type"] = 'Exterior'
+            args["subtype"] = 'Color'
+        data = {}
+        if args["type"] != 'Summary':
+            data = {
+                "component": dbms.getListComponent(int(args['id']), args["type"], args["subtype"]),
+                "url": dbms.getURLCar(int(args['id'])).replace('&angle=40&','&angle=90&'),
+                "type": args["type"],
+                "subtype": args["subtype"]
+            }
+        else:
+            item = ['Color', 'Wheel', 'Upholstery', 'Trim']
+            items = []
+            for i in item:
+                if i in args.keys():
+                    items.append(dbms.getPriceByName(args["Color"], i))
+            data = {
+                "component": [],
+                "url": dbms.getURLCar(int(args['id'])).replace('&angle=40&','&angle=90&'),
+                "type": args["type"],
+                "subtype": args["subtype"],
+                "items": items
+            }
+        print(data)
+        header = render_template('component/header.html')
+        build = render_template('component/build.html', data= data)
+        content = render_template('layout/2.html', header=header, content=build)
+        return render_template('index.html', content=content)
 
 @customer_bp.route('/profile', methods=['GET', 'POST'])
 def personalInfomation():
@@ -105,6 +129,15 @@ def personalInfomation():
         elif req["request"] == "cancel":
             return redirect(url_for("customer_bp.personalInfomation"))
     container = render_template('component/profile.html', data=data)
+    header = render_template('component/header.html')
+    footer = render_template('component/footer.html')
+    content = render_template('layout/2.html', header=header, content=container, footer=footer)
+    return render_template('index.html', content=content)
+
+@customer_bp.route('/setting', methods=['GET', 'POST'])
+def personalSetting():
+    data = {}
+    container = render_template('pages/setting.html', data=data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     content = render_template('layout/2.html', header=header, content=container, footer=footer)

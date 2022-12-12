@@ -12,7 +12,7 @@ def auth():
         return redirect(url_for('main_bp.login'))
     global auth
     sign, auth = defineToken(session["idlogin"])
-    if not sign:
+    if not sign or auth["role"] != 'leader':
         return redirect(url_for('main_bp.login'))
 
 @leader_bp.route('/', methods=['GET', 'POST'])

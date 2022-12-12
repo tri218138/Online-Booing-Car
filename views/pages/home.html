@@ -23,7 +23,7 @@
         {% for model in data["top"] %}
         <!-- {% print model %} -->
         <div class="col-lg-3 col-md-4 col-6">
-            <a href="#" class="d-block mb-4 h-100">
+            <a href="/{{role}}/model/detail?id={{model['id']}}" class="d-block mb-4 h-100">
                 <div class="card">
                     <img src="{{model['img_url']}}" class="w-100 shadow-1-strong rounded mb-4"
                         alt="Boat on Calm Water" />

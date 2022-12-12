@@ -34,9 +34,9 @@
                                         <!-- <a class="text-muted" href="#!">Forgot password?</a> -->
                                     </div>
 
-                                    {% if data and data["status"] == 'fail' %}%}
+                                    {% if "status" in data and data["status"] == 'fail' %}
                                         <div class="text-center pt-1 mb-3 pb-1">
-                                            <h6 class="mb-3" style="color:rgb(217, 127, 127);">{% print msg %}</h4>
+                                            <h6 class="mb-3" style="color:rgb(217, 127, 127);">{{"Login fail"}}</h4>
                                         </div>
                                     {% endif %}
 

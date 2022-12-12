@@ -1,34 +1,98 @@
-{% set role = request.blueprint.split('.')[0][:-3] %}
-<!-- {% print role %} # customer -->
-{% if role in ["customer"] %}
-<div class="container-fluid" style="height: 100%;">
-    <nav class="navbar sticky-top navbar-light justify-content-center"
-        style="border-bottom: 1px solid #cacaca;background-color: #221f1f;">
-        <a class="navbar-brand text-white p-3" href="#">Exterior</a>
-        <a class="navbar-brand text-white p-3" href="#">Interior</a>
-        <a class="navbar-brand text-white p-3" href="#">Summary</a>
-    </nav>
+{% set role = request.blueprint[:-3] %}
+{% if role == "customer" %}
+{% set component = data["component"] %}
+{% set url = data["url"] %}
+{% set type = data["type"] %}
+{% set subtype = data["subtype"] %}
+{% set items = data["items"]%}
+<div class="container-fluid bg-dark">
     <div class="row">
-        <div class="col-9">
-            <img src="https://cache.bmwusa.com/cosy.arox?pov=walkaround&brand=WBBI&vehicle=23II&client=byo&paint=P0C1M&fabric=FSBJG&sa=S01LD,S0248,S0319,S0322,S0330,S0407,S0420,S0494,S04AA,S04NB,S05AC,S05AS,S05AZ,S05DM,S06AC,S06AK,S06C4,S06NX,S06U7,S09T8&date=20220705&angle=40&quality=65&sharp=100&resp=png&BKGND=TRANSPARENT&width=1279"
-                class="img-fluid" alt="Responsive image">
+        <div class="col">
+            <nav class="navbar sticky-top navbar-light justify-content-center"
+                style="border-bottom: 1px solid #cacaca;background-color: #221f1f;">
+                {% set navs = ["Exterior", "Interior", "Summary"] %}
+                {% for i in navs %}
+                {% if i == type%}
+                <a class="navbar-brand text-white p-3" id="{{i}}" style="border-bottom: 1px solid #cacaca"
+                    href="#">{{i}}</a>
+                {% else %}
+                <a class="navbar-brand text-white p-3" id="{{i}}" href="#">{{i}}</a>
+                {% endif %}
+                {% endfor %}
+            </nav>
         </div>
-        <div class="col-3">
-            <div class="d-flex flex-column flex-shrink-0 p-3 text-white" style="background-color: #221f1f;">
-                <div class="font-weight-bold">Choose your Exterior</div>
-                <ul class="nav nav-pills flex-column mb-auto mt-2   ">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" aria-current="page">
-                            Home
-                        </a>
-                    </li>
-
+    </div>
+    <div class="row">
+        <div class="col-9 m-0" class="img-fluid"
+            style="background-image: url(https://media.istockphoto.com/photos/asphalt-race-track-ground-and-mountain-with-clouds-background-picture-id1142586703?b=1&k=20&m=1142586703&s=612x612&w=0&h=7KYbNdAT6EiUopf2kIP2NJ2HH-L7NsmkrAqn6ulTWB8=);background-repeat: no-repeat;background-position: center;background-size: cover;">
+            <div class="row sticky" style="height: 170px;">
+            </div>
+            <div class="row">
+                <img src="{{url}}" style="width:100%">
+            </div>
+        </div>
+        <div class="col-3 m-0">
+            <div class="d-flex flex-column flex-shrink-0 p-3 text-white"
+                style="background-color: #221f1f; height: 650px;">
+                {% if type != "Summary" %}
+                <h5 class="">Choose your {{type}}</h5>
+                <div id="changeEx" style="border: 1px solid #cacaca" class="">
+                    <nav class="navbar navbar-light justify-content-center"
+                        style="border-bottom: 1px solid #cacaca;background-color: #221f1f;">
+                        {% if type == "Exterior" %}
+                        {% set navs = ["Color", "Wheel"] %}
+                        {% for i in range(0, navs|length) %}
+                        {% if navs[i] == subtype%}
+                        <a class="navbar-brand text-white p-3" id="part{{i}}" style="border-bottom: 1px solid #cacaca"
+                            href="#">{{navs[i]}}</a>
+                        {% else %}
+                        <a class="navbar-brand text-white p-3" id="part{{i}}" href="#">{{navs[i]}}</a>
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        {% set navs = ["Upholstery", "Trim"] %}
+                        {% for i in range(0, navs|length) %}
+                        {% if navs[i] == subtype%}
+                        <a class="navbar-brand text-white p-3" id="part{{i}}" style="border-bottom: 1px solid #cacaca"
+                            href="#">{{navs[i]}}</a>
+                        {% else %}
+                        <a class="navbar-brand text-white p-3" id="part{{i}}" href="#">{{navs[i]}}</a>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </nav>
+                </div>
+                <div class="list-group-radio" id="radioExterior">
+                    {% for i in range(0, component|length) %}
+                    <input type="radio" name="{{subtype}}" value="{{component[i]['name']}}" id="{{i}}" />
+                    <label class="list-group-item" for="{{i}}">{{component[i]['name']}}</label>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <h4 class="">SUMMARY</h4>
+                {% for i in items %}
+                <span class="badge badge-light text-left m-3">
+                    <h5>{{i['name']}}</h5>
+                    <h6>${{i['price']}}</h6>
+                </span>
+                {% endfor %}
+                <button class="btn-light m-3" id="buyBtn">Mua</button>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+<div class="container-fluid" style="position: fixed;left: 0;bottom: 0;width: 100%;">
+    <div class="row">
+        <div class="col-6 m-5 text-white">
+            <h6 class="">ALPINE WHITE</h6>
+            <h3>Solid color that accentuates every curve and detail.</h3>
+        </div>
+        <div class="col-3 m-5 justify-content-center text-white">
+            <h6>MSRP AS BUILT</h6>
+            <h3>$109,575</h3>
+        </div>
+    </div>
+</div>
+
 {% endif %}
-
-<script>
-
-</script>

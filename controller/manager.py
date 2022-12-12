@@ -12,7 +12,7 @@ def auth():
         return redirect(url_for('main_bp.login'))
     global auth
     sign, auth = defineToken(session["idlogin"])
-    if not sign:
+    if not sign or auth["role"] != 'manager':
         return redirect(url_for('main_bp.login'))
 
 @manager_bp.route('/', methods=['GET', 'POST'])
@@ -109,7 +109,7 @@ def project():
 @manager_bp.route('/profile', methods=['GET', 'POST'])
 def personalInfomation():
     data = {}
-    data["customer"] = dbms.selectCustomerById(auth["idlogin"])
+    data["customer"] = dbms.selectEmployeeById(auth["idlogin"])
     data["mode"] = 'view'
     if request.method == "GET":
         req = request.args.to_dict()

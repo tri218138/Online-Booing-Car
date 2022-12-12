@@ -23,7 +23,7 @@
         {% if j % 3 == i %}
         {% set model = models[j] %}
         <a href="/{{role}}/model/detail?id={{model['id']}}" style="text-decoration: none;">
-            <div class="card">
+            <div class="card" style="background-color: white;">
                 <img src="{{model['img_url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
                 <div class="card-body">
                     <h5 class="card-title">{{model['branch']}}</h5>
@@ -33,6 +33,7 @@
                 </div>
             </div>
         </a>
+        <hr>
         {% endif %}
         {% endfor %}
     </div>

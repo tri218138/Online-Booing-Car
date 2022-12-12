@@ -23,7 +23,7 @@ class DBMS:
         else:
             self.Cursor.execute(f"SELECT * FROM bwm.account WHERE username = '{un}' AND password = '{ps}'" )
             data = self.Cursor.fetchone() # {}
-            if len(data) is not None:
+            if data is not None:
                 empID = data["empID"]
                 self.Cursor.execute(f"SELECT * FROM bwm.employee WHERE id = '{empID}'" )
                 data = self.Cursor.fetchone() # {}
@@ -32,7 +32,7 @@ class DBMS:
             else:
                 return {"status": False}
     def getModelsDetail(self):
-        self.Cursor.execute("SELECT * FROM bwm.car")
+        self.Cursor.execute(f"SELECT * FROM bwm.car")
         data = self.Cursor.fetchall()
         return data
     def getModelsDetailByType(self, type):
@@ -58,6 +58,13 @@ class DBMS:
         self.Cursor.execute(f"SELECT * FROM bwm.customer WHERE id = '{id}'")
         data = self.Cursor.fetchone()
         data["phone"] = data["phonenumber"]
+        return data
+    def selectEmployeeById(self, id):
+        self.Cursor.execute(f"SELECT * FROM bwm.employee WHERE id = '{id}'")
+        data = self.Cursor.fetchone()
+        #{'id': 4, 'Name': 'Eployee 4', 'salary': 1500.0, 'SSN': 1000003, 'typejob': 'Manager', 'languageSkill': 'good', 'technicalSkill': 'good', 'manageSkill': 'good', 'memID': None}
+        data["name"] = data["Name"]
+        # print(data)
         return data
 
     def selectTopKModel(self, k, attr):
@@ -87,9 +94,29 @@ class DBMS:
     def updateProjectProgress(self, data):
         self.Cursor.execute(f"UPDATE bwm.project SET progress = '{data['progress']}' WHERE id = '{data['id']}'")
         self.Database.commit()
+    def getListComponent(self, id, type, subtype):
+        if subtype != "Summry":
+            type = type.lower()
+            subtype = subtype.lower()
+            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bwm.component WHERE type = '{type}' AND carID = {id}) as a JOIN bwm.{type} ON a.id = {type}ID) WHERE {type}Type = '{subtype}'")
+            data = self.Cursor.fetchall()
+            return data
+        else:
+            return {}
+    
+    def getURLCar(self, id):
+        self.Cursor.execute(f"SELECT img_url FROM bwm.car WHERE id = {id}")
+        data = self.Cursor.fetchall()
+        return data[0]['img_url']
+
+    def getPriceByName(self, name, type):
+        self.Cursor.execute(f"SELECT name, price FROM bwm.component WHERE type = '{type}' AND name = '{name}'")
+        data = self.Cursor.fetchall()
+        return data[0]
+
     # def getDemoImage(self):
     #     return f'''
-    #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
+    #         <img id="demo-img-car" src="https://www.bwm.vn/content/dam/bwm/common/all-models/3-series/sedan/2018/inspire/bwm-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
     #             class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
     #     '''
     # def updateModelDetail(self, model_id, data):
