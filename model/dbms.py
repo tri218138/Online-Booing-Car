@@ -9,32 +9,52 @@ class DBMS:
             host="localhost",
             user="root",
             password="123456",
-            database="bwm",
+            database="bmw",
             cursorclass=pymysql.cursors.DictCursor
         )
         self.Cursor = self.Database.cursor()
     def store(self):
         self.Database.commit()
     def checkSignin(self, un, ps):
-        self.Cursor.execute(f"SELECT * FROM bwm.cusaccount WHERE username = '{un}' AND password = '{ps}'" )
+        self.Cursor.execute(f"SELECT * FROM bmw.cusaccount WHERE username = '{un}' AND password = '{ps}'" )
         data = self.Cursor.fetchone() # {}
         if len(data) > 0:
             return {"status": True, "id": data["cusID"], "role": "customer"}
         else:
-            self.Cursor.execute(f"SELECT * FROM bwm.account WHERE username = '{un}' AND password = '{ps}'" )
+            self.Cursor.execute(f"SELECT * FROM bmw.account WHERE username = '{un}' AND password = '{ps}'" )
             data = self.Cursor.fetchone() # {}
             if len(data) > 0:
                 empID = data["empID"]
-                self.Cursor.execute(f"SELECT * FROM bwm.employee WHERE id = '{empID}'" )
+                self.Cursor.execute(f"SELECT * FROM bmw.employee WHERE id = '{empID}'" )
                 data = self.Cursor.fetchone() # {}
                 role = data["typejob"].lower()
                 return {"status": True, "id": data["empID"], "role": role}
             else:
                 return {"status": False}
     def getModelsDetail(self):
-        self.Cursor.execute("SELECT * FROM bwm.car")
+        self.Cursor.execute(f"SELECT * FROM bmw.car")
         data = self.Cursor.fetchall()
         return data
+    def getListComponent(self, id, type, subtype):
+        if subtype != "Summry":
+            type = type.lower()
+            subtype = subtype.lower()
+            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bmw.component WHERE type = '{type}' AND carID = {id}) as a JOIN bmw.{type} ON a.id = {type}ID) WHERE {type}Type = '{subtype}'")
+            data = self.Cursor.fetchall()
+            return data
+        else:
+            return {}
+    
+    def getURLCar(self, id):
+        self.Cursor.execute(f"SELECT img_url FROM bmw.car WHERE id = {id}")
+        data = self.Cursor.fetchall()
+        return data[0]['img_url']
+
+    def getPriceByName(self, name, type):
+        self.Cursor.execute(f"SELECT name, price FROM bmw.component WHERE type = '{type}' AND name = '{name}'")
+        data = self.Cursor.fetchall()
+        return data[0]
+
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"

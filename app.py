@@ -9,6 +9,7 @@ from controller.designer import designer_bp
 app = Flask(
     __name__,
     template_folder='./views/',
+    static_folder="./views/static"
 )
 app.secret_key = ".."
 
