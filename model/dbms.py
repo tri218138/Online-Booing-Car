@@ -74,6 +74,19 @@ class DBMS:
                 WHERE id = '{id}'\
             ")
         self.Database.commit()
+
+    def selectBusinessOrders(self):
+        self.Cursor.execute(f"SELECT * FROM bwm.order")
+        data = self.Cursor.fetchall()
+        return data
+    def selectBusinessProjects(self):
+        self.Cursor.execute(f"SELECT * FROM bwm.project")
+        data = self.Cursor.fetchall()
+        return data
+
+    def updateProjectProgress(self, data):
+        self.Cursor.execute(f"UPDATE bwm.project SET progress = '{data['progress']}' WHERE id = '{data['id']}'")
+        self.Database.commit()
     # def getDemoImage(self):
     #     return f'''
     #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"

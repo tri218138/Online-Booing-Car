@@ -22,7 +22,7 @@ def home():
     data = {
         "top": dbms.selectTopKModel(4, 'year')
     }
-    print(data)
+    # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     home = render_template('pages/home.html', data=data)
@@ -38,7 +38,7 @@ def model():
             data = {
                 "models": dbms.getModelsDetailByType(type) #[]
             }
-            print(data)
+            # print(data)
             header = render_template('component/header.html')
             footer = render_template('component/footer.html')
             model = render_template('component/model.html', data= data)
@@ -47,7 +47,7 @@ def model():
     data = {
         "models": dbms.getModelsDetail() #[]
     }
-    print(data)
+    # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     model = render_template('component/model.html', data= data)
@@ -65,7 +65,7 @@ def detail():
             # data["car"] = dbms.selectModelById('1')
         if "angle" in req:
             data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
-            print(data)
+            # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     detail = render_template('component/detail.html', data= data)
@@ -78,9 +78,9 @@ def build():
         pass
     elif request.method == 'GET':
         req = request.args.to_dict()
-        print(req)
+        # print(req)
     data = {}
-    print(data)
+    # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     build = render_template('component/build.html', data= data)

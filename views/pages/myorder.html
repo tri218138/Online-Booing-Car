@@ -1,0 +1,34 @@
+{% set role = request.blueprint.split('.')[0][:-3] %}
+<!-- {% print role %} # customer -->
+{% if role in ["leader","manager"] %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Code</th>
+            <th scope="col">Ngày đặt xe</th>
+            <th scope="col">Mã khách hàng</th>
+            <th scope="col">Địa chỉ giao hàng</th>
+            <th scope="col">Thanh toán</th>
+            <th scope="col">Thành tiền</th>
+            <!-- <th scope="col">Trạng thái</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in range(data["myorder"]|length) %}
+        {% set order = data["myorder"][i] %}
+        <tr>
+            <th scope="row">{{i}}</th>
+            <td>{{order['Code']}}</td>
+            <td>{{order['orderDate']}}</td>
+            <td>{{order['cusID']}}</td>
+            <td>{{order['shippingAddress']}}</td>
+            <td>{{order['paymentMethod']}}</td>
+            <td>{{order['totalprice']}}</td>
+            <!-- <td>{{order['progress']}}</td> -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endif %}

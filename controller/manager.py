@@ -22,7 +22,7 @@ def home():
     data = {
         "top": dbms.selectTopKModel(4, 'year')
     }
-    print(data)
+    # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     home = render_template('pages/home.html', data=data)
@@ -38,7 +38,7 @@ def model():
             data = {
                 "models": dbms.getModelsDetailByType(type) #[]
             }
-            print(data)
+            # print(data)
             header = render_template('component/header.html')
             footer = render_template('component/footer.html')
             model = render_template('component/model.html', data= data)
@@ -47,7 +47,7 @@ def model():
     data = {
         "models": dbms.getModelsDetail() #[]
     }
-    print(data)
+    # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     model = render_template('component/model.html', data= data)
@@ -65,7 +65,7 @@ def detail():
             # data["car"] = dbms.selectModelById('1')
         if "angle" in req:
             data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
-            print(data)
+            # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     detail = render_template('component/detail.html', data= data)
@@ -78,9 +78,9 @@ def build():
         pass
     elif request.method == 'GET':
         req = request.args.to_dict()
-        print(req)
+        # print(req)
     data = {}
-    print(data)
+    # print(data)
     header = render_template('component/header.html')
     footer = render_template('component/footer.html')
     build = render_template('component/build.html', data= data)
@@ -89,17 +89,21 @@ def build():
 
 @manager_bp.route('/project', methods=['GET', 'POST'])
 def project():
-    if request.method == 'POST':
-        pass
-    elif request.method == 'GET':
-        req = request.args.to_dict()
-        print(req)
-    data = {}
-    # print(data)
     header = render_template('component/header.html')
-    footer = render_template('component/footer.html')
-    build = render_template('component/build.html', data= data)
-    content = render_template('layout/2.html', header=header, content=build, footer=footer)
+    if request.method == 'POST':
+        req = request.form.to_dict()
+        if "profectId" in req:
+            data_ = {
+                "id": req["profectId"],
+                "progress" : req["progress"],
+            }
+            dbms.updateProjectProgress(data_)
+    # content = """<h1>Trang mà leader nhận các đơn đặt ô tô của khách hàng, sau đó khởi động cho manager quản lý</h1>"""
+    data = {
+        "myproject": dbms.selectBusinessProjects()
+    }
+    content = render_template('pages/myproject.html',data=data)
+    content = render_template('layout/1.html', header=header, content = content)
     return render_template('index.html', content=content)
 
 @manager_bp.route('/profile', methods=['GET', 'POST'])

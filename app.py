@@ -22,4 +22,8 @@ app.register_blueprint(designer_bp, url_prefix='/designer')
 app.register_blueprint(leader_bp, url_prefix='/leader')
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    # $ flask run --host 0.0.0.0 --port 5000
+    # $ flask run --host 0.0.0.0 --port 5001
+    # $ flask run --host 0.0.0.0 --port 5002
+    # $ flask run --with-threads
+    app.run('0.0.0.0', port=5000, debug=True, threaded=True)
