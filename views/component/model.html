@@ -80,10 +80,10 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="a">
             <div class="navbar-nav">
-                <a class="nav-link" href="{{request.path}}/type">SAV</a>
-                <a class="nav-link" href="#">Sedan</a>
-                <a class="nav-link" href="#">Coupe</a>
-                <a class="nav-link" href="#">Electrified</a>
+                <a class="nav-link" href="{{request.path}}?type=sport">Sport</a>
+                <a class="nav-link" href="{{request.path}}?type=sedan">Sedan</a>
+                <a class="nav-link" href="{{request.path}}?type=coupe">Coupe</a>
+                <!-- <a class="nav-link" href="{{request.path}}?type=sav">Electrified</a> -->
             </div>
         </div>
     </div>
@@ -101,9 +101,8 @@
                 <img src="{{model['img_url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
                 <div class="card-body">
                     <h5 class="card-title">{{model['branch']}}</h5>
-                    <p class="card-text">
-                        {{model['price']}}
-                    </p>
+                    <p class="card-text">{{model['price']}}</p>
+                    <p class="card-text">{{model['series_name']}}</p>
                     <!-- <a href="#!" class="btn btn-primary">Button</a> -->
                 </div>
             </div>

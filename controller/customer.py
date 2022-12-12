@@ -31,8 +31,19 @@ def home():
 
 @customer_bp.route('/model', methods=['GET', 'POST'])
 def model():
-    if request.method == 'POST':
-        pass
+    if request.method == 'GET':
+        req = request.args.to_dict()
+        if "type" in req:
+            type = req["type"]
+            data = {
+                "models": dbms.getModelsDetailByType(type) #[]
+            }
+            print(data)
+            header = render_template('component/header.html')
+            footer = render_template('component/footer.html')
+            model = render_template('component/model.html', data= data)
+            content = render_template('layout/1.html', header=header, content=model, footer=footer)
+            return render_template('index.html', content=content)
     data = {
         "models": dbms.getModelsDetail() #[]
     }
@@ -50,8 +61,8 @@ def detail():
     if request.method == 'GET':
         req = request.args.to_dict()
         if "id" in req:
-            # data["car"] = dbms.selectModelById(req["id"]) #use later
-            data["car"] = dbms.selectModelById('1') #use later
+            data["car"] = dbms.selectModelById(req["id"]) #use later
+            # data["car"] = dbms.selectModelById('1')
         if "angle" in req:
             data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
             print(data)

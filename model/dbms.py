@@ -35,6 +35,10 @@ class DBMS:
         self.Cursor.execute("SELECT * FROM bwm.car")
         data = self.Cursor.fetchall()
         return data
+    def getModelsDetailByType(self, type):
+        self.Cursor.execute(f"SELECT * FROM bwm.car WHERE series_name LIKE '%{type}%'")
+        data = self.Cursor.fetchall()
+        return data
     def selectComponentByType(self, type):
         self.Cursor.execute(f"SELECT * FROM bwm.component WHERE type = '{type}'")
         data = self.Cursor.fetchall()

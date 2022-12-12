@@ -3,16 +3,33 @@
 {% if role in ["customer"] %}
 {% set req = request.args.to_dict() %}
 {% set model = data["car"] %}
-<h1>Thông tin chi tiết của car id</h1>
-<form action="{{request.path}}" method="get">
-    <input type="hidden" name="id" value="{{req['id']}}">
-    <input type="range" id="angle" name="angle" min="0" max="180" value="{{req['angle']}}" step="10" onchange="this.form.submit()">
-    <label for="angle">3D</label>
-</form>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-7">
+            <img src="{{model['img_url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+        </div>
+        <div class="col-md-5">
+            <form action="{{request.path}}" method="get">
+                <label for="angle">3D car: {{req['angle']}}</label>
+                <input type="hidden" name="id" value="{{req['id']}}">
+                <input type="range" id="angle" name="angle" min="0" max="180" value="{{req['angle']}}" step="10"
+                    onchange="this.form.submit()">
+            </form>
+            <div class="card display-flex">
+                <div class="card-title" style="text-align: center">
+                    <h1>{{model['model_name']}}</h1>
+                </div>
+                <div class="card-body">{{model['branch']}} {{model['year']}}</div>
+                <div class="card-body">Series: {{model['series_name']}}</div>
+                <div class="card-body">Tải trọng: {{model['mass']}}</div>
+                <!-- <div class="card-body">Màu: {{model['color']}}</div> -->
+                <!-- <div class="card-body"></div> -->
+                <a href="{{ url_for(request.blueprint+'.build', id = req['id']) }}" style="text-align: center;">
+                    <button class="btn btn-primary">Thiết kế xe cho chính bạn</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
-<img src="{{model['img_url']}}" class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
-
-<a href="{{ url_for(request.blueprint+'.build', id = req['id']) }}">
-    <button class="btn btn-primary">Đặt</button>
-</a>
 {% endif %}
