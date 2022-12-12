@@ -77,8 +77,9 @@ import re
 def build():
     if request.method == 'POST':
         data = json.loads(request.data)
+        print(data)
         # add database bill
-        return Response('BMW cảm ơn bạn đã đồng hành', 200)
+        return {'mes':'BMW cảm ơn bạn đã đồng hành', 'status': 200}
     else:
         args = request.args.to_dict()
         if len(args.values()) == 1:
@@ -95,9 +96,10 @@ def build():
         else:
             item = ['Color', 'Wheel', 'Upholstery', 'Trim']
             items = []
+            print(args.keys())
             for i in item:
                 if i in args.keys():
-                    items.append(dbms.getPriceByName(args["Color"], i))
+                    items.append(dbms.getPriceByName(args[i], i.lower()))
             data = {
                 "component": [],
                 "url": dbms.getURLCar(int(args['id'])).replace('&angle=40&','&angle=90&'),
