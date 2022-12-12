@@ -41,8 +41,11 @@ def detail():
     if request.method == 'POST':
         pass
     carID = request.args['id']
+    car = dbms.getModelByID(carID)
+    faq= dbms.getfaq(carID)
     data = {
-        "car": dbms.getModelByID(carID)
+        "car": car,
+        "faq": faq
     }
     header = render_template('component/header.html')
     model = render_template('component/detail.html', data= data)
