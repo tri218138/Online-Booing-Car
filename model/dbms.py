@@ -137,9 +137,12 @@ class DBMS:
 
     def selectTopKModel(self, k, attr):
         if attr == 'year':
-            self.Cursor.execute(f"SELECT * FROM bmw.car ORDER BY year DESC LIMIT 4")
+            self.Cursor.execute(f"SELECT * FROM bmw.car ORDER BY year DESC LIMIT 3")
             data = self.Cursor.fetchall()
-            return data
+
+            tmp = [self.selectModelById(23)]
+            tmp.extend(data)
+            return tmp
 
     def saveCustomerProfile(self, id, data):
         self.Cursor.execute(f"UPDATE bmw.customer SET \
@@ -174,7 +177,7 @@ class DBMS:
         if subtype != "Summry":
             type = type.lower()
             subtype = subtype.lower()
-            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bmw.component WHERE type = '{type}' AND carID = {id}) as a JOIN bmw.{type} ON a.id = {type}_ID) WHERE {type}Type = '{subtype}'")
+            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bmw.component WHERE type = '{type}' AND carID = {id}) as a JOIN bmw.{type} ON a.id = {type}_ID) WHERE {type}_type = '{subtype}'")
             data = self.Cursor.fetchall()
             return data
         else:
@@ -186,8 +189,10 @@ class DBMS:
         return data[0]['img_url']
 
     def getPriceByName(self, name, type):
-        self.Cursor.execute(f"SELECT name, price FROM bmw.component WHERE type = '{type}' AND name = '{name}'")
+        print(name, type)
+        self.Cursor.execute(f"SELECT name, price FROM bmw.component WHERE name = '{name}'")
         data = self.Cursor.fetchall()
+        print(data)
         return data[0]
 
     

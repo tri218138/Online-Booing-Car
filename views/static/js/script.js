@@ -91,7 +91,7 @@ if (btn != undefined)
         })
         res = await res
         console.log(res)
-        alert(res['mes'])
+        alert('BMW cảm ơn bạn đã đồng hành')
         window.localStorage.clear()
         window.location.href = '/customer'
     })

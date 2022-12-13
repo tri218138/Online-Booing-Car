@@ -5,6 +5,21 @@
 {% set type = data["type"] %}
 {% set subtype = data["subtype"] %}
 {% set items = data["items"]%}
+<style>
+    input[type="radio"] + label{
+        background-color: white;
+        color: black;
+    }
+    input[type="radio"]:checked + label{
+        background-color: black;
+        color: white;
+    }
+    input[type="radio"]:checked + label:hover{
+        background-color: black;
+        color: white;
+    }
+</style>
+
 <div class="container-fluid bg-dark">
     <div class="row">
         <div class="col">
@@ -29,13 +44,25 @@
             </div>
             <div class="row">
                 <img src="{{url}}" style="width:100%">
+                <div class="container-fluid" style="position: fixed;left: 0;bottom: 0;width: 100%">
+                    <div class="row">
+                        <div class="col-6 m-5 text-white">
+                            <h6 class="">ALPINE WHITE</h6>
+                            <h3>Solid color that accentuates every curve and detail.</h3>
+                        </div>
+                        <div class="col-3 m-5 justify-content-center text-white">
+                            <h6>MSRP AS BUILT</h6>
+                            <h3>$109,575</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-3 m-0">
             <div class="d-flex flex-column flex-shrink-0 p-3 text-white"
                 style="background-color: #221f1f; height: 650px;">
                 {% if type != "Summary" %}
-                <h5 class="">Choose your {{type}}</h5>
+                <!-- <h5 class="">Choose your {{type}}</h5> -->
                 <div id="changeEx" style="border: 1px solid #cacaca" class="">
                     <nav class="navbar navbar-light justify-content-center"
                         style="border-bottom: 1px solid #cacaca;background-color: #221f1f;">
@@ -64,35 +91,24 @@
                 </div>
                 <div class="list-group-radio" id="radioExterior">
                     {% for i in range(0, component|length) %}
-                    <input type="radio" name="{{subtype}}" value="{{component[i]['name']}}" id="{{i}}" />
-                    <label class="list-group-item text-left text-dark for="{{i}}">{{component[i]['name']}}</label>
+                    <input type="radio" style="opacity: 0;" name="{{subtype}}" value="{{component[i]['name']}}" id="select{{i}}" />
+                    <label class="list-group-item text-left" for='select{{i}}'>{{component[i]['name']}}</label>
                     {% endfor %}
                 </div>
                 {% else %}
                 <h4 class="text-center">SUMMARY</h4>
                 {% for i in items %}
-                <span class="badge badge-light text-left m-3">
+                <div class="text-left m-3" style="background-color: white; color: black; border-radius: 10px; padding: 1em;">
                     <h5>{{i['name']}}</h5>
                     <h6>${{i['price']}}</h6>
-                </span>
+                </div>
                 {% endfor %}
-                <button class="btn-light m-3" id="buyBtn">Mua</button>
+                <button class="btn btn-success" id="buyBtn">Mua</button>
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid" style="position: fixed;left: 0;bottom: 0;width: 100%;">
-    <div class="row">
-        <div class="col-6 m-5 text-white">
-            <h6 class="">ALPINE WHITE</h6>
-            <h3>Solid color that accentuates every curve and detail.</h3>
-        </div>
-        <div class="col-3 m-5 justify-content-center text-white">
-            <h6>MSRP AS BUILT</h6>
-            <h3>$109,575</h3>
-        </div>
-    </div>
-</div>
+
 
 {% endif %}
