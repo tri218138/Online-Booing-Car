@@ -165,7 +165,7 @@ def detail():
 
 @customer_bp.route('/myorder', methods=['GET', 'POST'])
 def order():
-    data = dbms.getOrdersByCusId(session['idlogin'])
+    data = dbms.getOrdersByCusId(session['username'])
     print(data)
     
     header = render_template('component/header.html')
