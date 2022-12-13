@@ -103,6 +103,10 @@ class DBMS:
         self.Cursor.execute(f"SELECT * FROM bmw.car")
         data = self.Cursor.fetchall()
         return data
+    def getOrdersByCusId(self, cusID):
+        self.Cursor.execute(f"SELECT * FROM bmw.order, bmw.cusaccount WHERE order.cusID = cusaccount.cusID AND cusaccount.username = '{cusID}'")
+        data = self.Cursor.fetchall()
+        return data
     def getModelsDetailByType(self, type):
         self.Cursor.execute(f"SELECT * FROM bmw.car WHERE series_name LIKE '%{type}%'")
         data = self.Cursor.fetchall()

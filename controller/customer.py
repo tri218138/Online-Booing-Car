@@ -163,6 +163,16 @@ def detail():
     content = render_template('layout/1.html', header=header, content=model)
     return render_template('index.html', content=content)
 
+@customer_bp.route('/myorder', methods=['GET', 'POST'])
+def order():
+    data = dbms.getOrdersByCusId(session['username'])
+    print(data)
+    
+    header = render_template('component/header.html')
+    order = render_template('component/order.html', data=data)
+    content = render_template('layout/4.html', header=header, content=order)
+
+    return render_template('index.html', content=content)
 
 @customer_bp.errorhandler(404)
 def page_not_found(e):
