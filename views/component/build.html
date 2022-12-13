@@ -65,11 +65,11 @@
                 <div class="list-group-radio" id="radioExterior">
                     {% for i in range(0, component|length) %}
                     <input type="radio" name="{{subtype}}" value="{{component[i]['name']}}" id="{{i}}" />
-                    <label class="list-group-item" for="{{i}}">{{component[i]['name']}}</label>
+                    <label class="list-group-item text-left text-dark for="{{i}}">{{component[i]['name']}}</label>
                     {% endfor %}
                 </div>
                 {% else %}
-                <h4 class="">SUMMARY</h4>
+                <h4 class="text-center">SUMMARY</h4>
                 {% for i in items %}
                 <span class="badge badge-light text-left m-3">
                     <h5>{{i['name']}}</h5>

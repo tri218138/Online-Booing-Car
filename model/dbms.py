@@ -174,7 +174,7 @@ class DBMS:
         if subtype != "Summry":
             type = type.lower()
             subtype = subtype.lower()
-            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bmw.component WHERE type = '{type}' AND carID = {id}) as a JOIN bmw.{type} ON a.id = {type}ID) WHERE {type}Type = '{subtype}'")
+            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bmw.component WHERE type = '{type}' AND carID = {id}) as a JOIN bmw.{type} ON a.id = {type}_ID) WHERE {type}Type = '{subtype}'")
             data = self.Cursor.fetchall()
             return data
         else:

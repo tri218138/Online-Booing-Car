@@ -4,24 +4,30 @@ var summary = document.getElementById("Summary");
 var part0 = document.getElementById("part0");
 var part1 = document.getElementById("part1");
 var btn = document.getElementById("buyBtn");
-
+//window.localStorage.clear()
 window.localStorage.setItem('idCar', (new URLSearchParams(window.location.search)).get("id"))
-// window.localStorage.setItem('curType', 'Exterior')
+if (window.localStorage.getItem('curType') == undefined)
+    window.localStorage.setItem('curType', 'Exterior')
+if (window.localStorage.getItem('curSubtype') == undefined)
+    window.localStorage.setItem('curSubtype', 'Color')
 // window.localStorage.setItem('curSubtype', 'Color')
-
+form = JSON.parse(window.localStorage.getItem('form'))
+console.log(form, window.localStorage.getItem('curSubtype'))
 const handleChangeTab = () => {
     subtype = window.localStorage.getItem('curSubtype');
     if (subtype == "Summary") rerurn; 
-    value = Array.from(document.getElementsByName(subtype)).find(e => e.checked)
+    value = document.querySelector(`input[name=${subtype}]:checked`);
     if (value == undefined) return;
     else value = value.value
-    form = window.localStorage.getItem('form')
+    form = JSON.parse( window.localStorage.getItem('form'))
     if (form == undefined){
-        window.localStorage.setItem('form', {subtype: value})
+        form = {}
+        form[subtype] = value
+        window.localStorage.setItem('form', JSON.stringify(form))
     } 
     else{
         form[subtype] = value
-        window.localStorage.setItem('form', form)
+        window.localStorage.setItem('form', JSON.stringify(form))
     }
 }
 
@@ -35,7 +41,7 @@ exterior.addEventListener('click', () => {
 interior.addEventListener('click', () => {
     handleChangeTab()
     window.localStorage.setItem('curType', 'Interior')
-    window.localStorage.setItem('curSubtype', 'U')
+    window.localStorage.setItem('curSubtype', 'Upholstery')
     car = window.localStorage.getItem('idCar')
     window.location.href = `/customer/build?id=${car}&type=Interior&subtype=Upholstery`
 })
@@ -43,7 +49,7 @@ summary.addEventListener('click', () => {
     handleChangeTab()
     window.localStorage.setItem('curType', 'Summary')
     car = window.localStorage.getItem('idCar')
-    form = window.localStorage.getItem('form')
+    form = JSON.parse(window.localStorage.getItem('form'))
     query = ""
     if (form != undefined)
         for (const key of Object.keys(form)) {
@@ -72,9 +78,10 @@ if (part1 != undefined)
 
 if (btn != undefined)
     btn.addEventListener('click', async () => {
-        data = window.localStorage.getItem('form')
+        data = JSON.parse(window.localStorage.getItem('form'))
         if (data == undefined) data = {};
         data['carID'] = window.localStorage.getItem('idCar')
+        console.log(data)
         var res = await fetch('/customer/build', {
             method: 'POST',
             headers: {
@@ -82,8 +89,9 @@ if (btn != undefined)
             },
             body: JSON.stringify(data),
         })
+        res = await res
         console.log(res)
-        alert('Complete')
+        alert(res['mes'])
         window.localStorage.clear()
         window.location.href = '/customer'
     })
