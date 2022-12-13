@@ -163,7 +163,7 @@ def detail():
     content = render_template('layout/1.html', header=header, content=model)
     return render_template('index.html', content=content)
 
-@customer_bp.route('/order', methods=['GET', 'POST'])
+@customer_bp.route('/myorder', methods=['GET', 'POST'])
 def order():
     data = dbms.getOrdersByCusId(session['idlogin'])
     print(data)
