@@ -64,21 +64,19 @@ def detail():
         carID = request.form['id']
 
     msg = ""
- 
+
     if request.method == 'POST':
         req = request.form.to_dict()
         req["year"] = int(req["year"])
         req["starting_msrp"] = float(req["starting_msrp"])
-        req["mass"] = float(req["mass"])
+        # req["mass"] = float(req["mass"])
         
-        if (not req["model_name"] or not req["series_name"] or not req["title"] or not req["mass"] or not req["starting_msrp"] or not req["branch"] or not req["year"] ):
+        if (not req["model_name"] or not req["series_name"] or not req["title"] or not req["starting_msrp"] or not req["branch"] or not req["year"] ):
             msg = "You need to complete all inputs"
         elif (req["year"]<0):
             msg = "Year is invalid"
         elif (req["starting_msrp"]<0):
             msg = "Starting price is invalid"
-        elif (req["mass"]<0):
-            msg = "Mass is invalid" 
         
         if (msg == ""):
             msg = dbms.updateCar(carID, req) 
@@ -97,7 +95,7 @@ def detail():
         req = request.args.to_dict()
         if "angle" in req:
             data["car"]["img_url"] = re.sub("&angle=.{2}&|&angle=.{3}&|&angle=.{1}&", f"&angle={req['angle']}&", data["car"]["img_url"])
-                 
+
     data["msg"] = msg       
     header = render_template('component/header.html')
     model = render_template('component/updateCar.html', data = data)
@@ -164,7 +162,7 @@ def project():
 @manager_bp.route('/profile', methods=['GET', 'POST'])
 def personalInfomation():
     data = {}
-    data["customer"] = dbms.selectEmployeeById(auth["idlogin"])
+    data["manager"] = dbms.selectEmployeeById(auth["id"])
     data["mode"] = 'view'
     if request.method == "GET":
         req = request.args.to_dict()
@@ -174,7 +172,7 @@ def personalInfomation():
     elif request.method == "POST":
         req = request.form.to_dict() #{'name': 'Juana Bonhomme', 'email': '', 'phone': '+86-222-233-47688', 'address': '44 Riverside Street', 'request': 'save'}
         if req["request"] == "save":
-            dbms.saveCustomerProfile(auth["idlogin"], data=req)
+            # dbms.saveEmployeeProfile(auth["id"], data=req)
             return redirect(url_for("manager_bp.personalInfomation"))
         elif req["request"] == "cancel":
             return redirect(url_for("manager_bp.personalInfomation"))

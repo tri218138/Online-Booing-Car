@@ -114,7 +114,7 @@ def build():
 @customer_bp.route('/profile', methods=['GET', 'POST'])
 def personalInfomation():
     data = {}
-    data["customer"] = dbms.selectCustomerById(auth["idlogin"])
+    data["customer"] = dbms.selectCustomerById(auth["id"])
     data["mode"] = 'view'
     if request.method == "GET":
         req = request.args.to_dict()
@@ -124,7 +124,7 @@ def personalInfomation():
     elif request.method == "POST":
         req = request.form.to_dict() #{'name': 'Juana Bonhomme', 'email': '', 'phone': '+86-222-233-47688', 'address': '44 Riverside Street', 'request': 'save'}
         if req["request"] == "save":
-            dbms.saveCustomerProfile(auth["idlogin"], data=req)
+            dbms.saveCustomerProfile(auth["id"], data=req)
             return redirect(url_for("customer_bp.personalInfomation"))
         elif req["request"] == "cancel":
             return redirect(url_for("customer_bp.personalInfomation"))

@@ -1,6 +1,6 @@
 {% set role = request.blueprint.split('.')[0][:-3] %}
 <!-- {% print role %} # customer -->
-{% if role in ["customer","manager"] %}
+{% if role in ["customer","manager","leader"] %}
 {% set member = data[role] %}
 {% set mode = data["mode"] %}
 <section style="background-color: #eee;">
@@ -105,6 +105,22 @@
                                         {% endif %}
                                     </div>
                                 </div>
+                                {% if role in ["manager", "leader"] %}
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Lương hiện hành</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        {% if mode == 'edit' %}
+                                        <input type="text" id="salary" name="salary" class="text-muted mb-0"
+                                            value="{{member['salary']}}" disabled/>
+                                        {% else %}
+                                        <p class="text-muted mb-0">{{member["salary"]}}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                         {% if mode == 'edit' %}

@@ -8,8 +8,8 @@ class DBMS:
         self.Database = pymysql.connect(
             host="localhost",
             user="root",
-            password="",
-            database="BWM",
+            password="280818",
+            database="bmw",
             cursorclass=pymysql.cursors.DictCursor
         )
         self.Cursor = self.Database.cursor()
@@ -61,7 +61,6 @@ class DBMS:
         self.Database.commit()
         return username, "customer"      
     
-      
     # END log in sign up
     
     # def getDemoImage(self):
@@ -85,51 +84,51 @@ class DBMS:
     # def addOrder(self, data):
     #     Cursor.execute(f"INSERT INTO onlinebookingcar.orderList (components) VALUES ('{data}')")
     def checkSignin(self, un, ps):
-        self.Cursor.execute(f"SELECT * FROM bwm.cusaccount WHERE username = '{un}' AND password = '{ps}'" )
+        self.Cursor.execute(f"SELECT * FROM bmw.cusaccount WHERE username = '{un}' AND password = '{ps}'" )
         data = self.Cursor.fetchone() # {}
         if data is not None:
             return {"status": True, "id": data["cusID"], "role": "customer"}
         else:
-            self.Cursor.execute(f"SELECT * FROM bwm.account WHERE username = '{un}' AND password = '{ps}'" )
+            self.Cursor.execute(f"SELECT * FROM bmw.account WHERE username = '{un}' AND password = '{ps}'" )
             data = self.Cursor.fetchone() # {}
             if data is not None:
                 empID = data["empID"]
-                self.Cursor.execute(f"SELECT * FROM bwm.employee WHERE id = '{empID}'" )
+                self.Cursor.execute(f"SELECT * FROM bmw.employee WHERE id = '{empID}'" )
                 data = self.Cursor.fetchone() # {}
                 role = data["typejob"].lower()
                 return {"status": True, "id": empID, "role": role}
             else:
                 return {"status": False}
     def getModelsDetail(self):
-        self.Cursor.execute(f"SELECT * FROM bwm.car")
+        self.Cursor.execute(f"SELECT * FROM bmw.car")
         data = self.Cursor.fetchall()
         return data
     def getModelsDetailByType(self, type):
-        self.Cursor.execute(f"SELECT * FROM bwm.car WHERE series_name LIKE '%{type}%'")
+        self.Cursor.execute(f"SELECT * FROM bmw.car WHERE series_name LIKE '%{type}%'")
         data = self.Cursor.fetchall()
         return data
     def selectComponentByType(self, type):
-        self.Cursor.execute(f"SELECT * FROM bwm.component WHERE type = '{type}'")
+        self.Cursor.execute(f"SELECT * FROM bmw.component WHERE type = '{type}'")
         data = self.Cursor.fetchall()
         for d in data:
             d["description"] = d["desciption"]
         return data
     def selectComponentById(self, id):
-        self.Cursor.execute(f"SELECT * FROM bwm.component WHERE id = '{id}'")
+        self.Cursor.execute(f"SELECT * FROM bmw.component WHERE id = '{id}'")
         data = self.Cursor.fetchone()
         data["description"] = data["desciption"]
         return data
     def selectModelById(self, id):
-        self.Cursor.execute(f"SELECT * FROM bwm.car WHERE id = '{id}'")
+        self.Cursor.execute(f"SELECT * FROM bmw.car WHERE id = '{id}'")
         data = self.Cursor.fetchone()
         return data
     def selectCustomerById(self, id):
-        self.Cursor.execute(f"SELECT * FROM bwm.customer WHERE id = '{id}'")
+        self.Cursor.execute(f"SELECT * FROM bmw.customer WHERE id = '{id}'")
         data = self.Cursor.fetchone()
         data["phone"] = data["phonenumber"]
         return data
     def selectEmployeeById(self, id):
-        self.Cursor.execute(f"SELECT * FROM bwm.employee WHERE id = '{id}'")
+        self.Cursor.execute(f"SELECT * FROM bmw.employee WHERE id = '{id}'")
         data = self.Cursor.fetchone()
         #{'id': 4, 'Name': 'Eployee 4', 'salary': 1500.0, 'SSN': 1000003, 'typejob': 'Manager', 'languageSkill': 'good', 'technicalSkill': 'good', 'manageSkill': 'good', 'memID': None}
         data["name"] = data["Name"]
@@ -138,12 +137,20 @@ class DBMS:
 
     def selectTopKModel(self, k, attr):
         if attr == 'year':
-            self.Cursor.execute(f"SELECT * FROM bwm.car ORDER BY year DESC LIMIT 4")
+            self.Cursor.execute(f"SELECT * FROM bmw.car ORDER BY year DESC LIMIT 4")
             data = self.Cursor.fetchall()
             return data
 
     def saveCustomerProfile(self, id, data):
-        self.Cursor.execute(f"UPDATE bwm.customer SET \
+        self.Cursor.execute(f"UPDATE bmw.customer SET \
+                name = '{data['name']}' , \
+                address = '{data['address']}' ,\
+                phonenumber = '{data['phone']}' \
+                WHERE id = '{id}'\
+            ")
+        self.Database.commit()
+    def saveEmployeeProfile(self, id, data):
+        self.Cursor.execute(f"UPDATE bmw.employee SET \
                 name = '{data['name']}' , \
                 address = '{data['address']}' ,\
                 phonenumber = '{data['phone']}' \
@@ -152,52 +159,52 @@ class DBMS:
         self.Database.commit()
 
     def selectBusinessOrders(self):
-        self.Cursor.execute(f"SELECT * FROM bwm.order")
+        self.Cursor.execute(f"SELECT * FROM bmw.order")
         data = self.Cursor.fetchall()
         return data
     def selectBusinessProjects(self):
-        self.Cursor.execute(f"SELECT * FROM bwm.project")
+        self.Cursor.execute(f"SELECT * FROM bmw.project")
         data = self.Cursor.fetchall()
         return data
 
     def updateProjectProgress(self, data):
-        self.Cursor.execute(f"UPDATE bwm.project SET progress = '{data['progress']}' WHERE id = '{data['id']}'")
+        self.Cursor.execute(f"UPDATE bmw.project SET progress = '{data['progress']}' WHERE id = '{data['id']}'")
         self.Database.commit()
     def getListComponent(self, id, type, subtype):
         if subtype != "Summry":
             type = type.lower()
             subtype = subtype.lower()
-            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bwm.component WHERE type = '{type}' AND carID = {id}) as a JOIN bwm.{type} ON a.id = {type}ID) WHERE {type}Type = '{subtype}'")
+            self.Cursor.execute(f"SELECT name FROM ((SELECT * FROM bmw.component WHERE type = '{type}' AND carID = {id}) as a JOIN bmw.{type} ON a.id = {type}ID) WHERE {type}Type = '{subtype}'")
             data = self.Cursor.fetchall()
             return data
         else:
             return {}
     
     def getURLCar(self, id):
-        self.Cursor.execute(f"SELECT img_url FROM bwm.car WHERE id = {id}")
+        self.Cursor.execute(f"SELECT img_url FROM bmw.car WHERE id = {id}")
         data = self.Cursor.fetchall()
         return data[0]['img_url']
 
     def getPriceByName(self, name, type):
-        self.Cursor.execute(f"SELECT name, price FROM bwm.component WHERE type = '{type}' AND name = '{name}'")
+        self.Cursor.execute(f"SELECT name, price FROM bmw.component WHERE type = '{type}' AND name = '{name}'")
         data = self.Cursor.fetchall()
         return data[0]
 
     
     def getModelByID(self, id):
-        self.Cursor.execute("SELECT * FROM bwm.car WHERE id = %s",(id))
+        self.Cursor.execute("SELECT * FROM bmw.car WHERE id = %s",(id))
         data = self.Cursor.fetchall()
         return data[0]
     
     def getfaq(self, carid):
-        self.Cursor.execute("SELECT * FROM bwm.faq WHERE carid = %s",(carid))
+        self.Cursor.execute("SELECT * FROM bmw.faq WHERE carid = %s",(carid))
         data = self.Cursor.fetchall()
         return data
     
     def updateCar(self, carid, data):
-        updateData = (data["model_name"],data["series_name"],data["title"],data["branch"],data["mass"],data["starting_msrp"],data["year"])
+        updateData = (data["model_name"],data["series_name"],data["title"],data["branch"],data["mass"],data["starting_msrp"],data["year"], carid)
         try: 
-            self.Cursor.execute("UPDATE car SET model_name = %s, series_name = %s, title = %s, branch = %s, mass = %s, starting_msrp = %s, year = %s",updateData)
+            self.Cursor.execute("UPDATE car SET model_name = %s, series_name = %s, title = %s, branch = %s, mass = %s, starting_msrp = %s, year = %s WHERE id = %s",updateData)
             self.Database.commit()           
         except (pymysql.Error) as e:
             return e
@@ -205,7 +212,7 @@ class DBMS:
         return ""
     # def getDemoImage(self):
     #     return f'''
-    #         <img id="demo-img-car" src="https://www.bwm.vn/content/dam/bwm/common/all-models/3-series/sedan/2018/inspire/bwm-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
+    #         <img id="demo-img-car" src="https://www.bmw.vn/content/dam/bmw/common/all-models/3-series/sedan/2018/inspire/bmw-3series-3er-inspire-sp-xxl.jpg.asset.1627477249501.jpg"
     #             class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
     #     '''
     # def updateModelDetail(self, model_id, data):

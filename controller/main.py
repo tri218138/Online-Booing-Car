@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, g
 from model.dbms import dbms
+import string, random
 
 main_bp = Blueprint('main_bp', __name__)
 
@@ -10,6 +11,12 @@ def defineToken(idlogin):
         if idlogin == auth["idlogin"]:
             return True, auth
     return False, None
+
+def supply_session_id():
+    session_id = ''.join(random.choices(string.digits+string.ascii_uppercase, k=10))
+    while session_id in TOKEN:
+        session_id = ''.join(random.choices(string.digits+string.ascii_uppercase, k=10))
+    return session_id
 
 @main_bp.before_request
 def auth():
@@ -37,8 +44,9 @@ def login():
         response = dbms.checkSignin(req["username"], req["password"])
         if response["status"]:
             session["username"] = req["username"]
-            session["idlogin"] = response["id"]
-            TOKEN.append({"idlogin": response["id"], "username" : req["username"], "role": response["role"]})
+            idlogin = supply_session_id()
+            session["idlogin"] = idlogin
+            TOKEN.append({"idlogin": idlogin, "id": response["id"], "username" : req["username"], "role": response["role"]})
             return redirect(url_for(f'{response["role"]}_bp.home'))
         else:
             data = {
