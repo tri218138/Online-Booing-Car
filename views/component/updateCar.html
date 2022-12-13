@@ -80,17 +80,16 @@
                 </div>
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <textarea name="title" class="form-control" rows="3">{{model["title"]}}
-                    </textarea>                
+                    <textarea name="title" class="form-control" rows="3">{{model["title"]}}</textarea>                
                 </div>
 
                 <div class="form-group">
-                    <label for="starting_msrp">Starting price</label>
+                    <label for="starting_msrp">Starting price ($)</label>
                     <input type="number" step=any  class="form-control"  name="starting_msrp" placeholder="" value='{{model["starting_msrp"]}}'>
                 </div>
                 <div class="form-group">
-                    <label for="mass">Mass</label>
-                    <input type="number" class="form-control" name="mass" placeholder="" value='{{model["mass"]}}'>
+                    <label for="mass">Mass (kg)</label>
+                    <input type="number" class="form-control" step=any  name="mass" placeholder="" value='{{model["mass"]}}'>
                 </div>
 
                 <div class="form-group">
