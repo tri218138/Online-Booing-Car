@@ -211,9 +211,9 @@ class DBMS:
         return data
     
     def updateCar(self, carid, data):
-        updateData = (data["model_name"],data["series_name"],data["title"],data["branch"],data["mass"],data["starting_msrp"],data["year"], carid)
+        updateData = (data["model_name"],data["series_name"],data["title"],data["branch"],data["starting_msrp"],data["year"], carid)
         try: 
-            self.Cursor.execute("UPDATE car SET model_name = %s, series_name = %s, title = %s, branch = %s, mass = %s, starting_msrp = %s, year = %s WHERE id = %s",updateData)
+            self.Cursor.execute("UPDATE car SET model_name = %s, series_name = %s, title = %s, branch = %s, starting_msrp = %s, year = %s WHERE id = %s",updateData)
             self.Database.commit()           
         except (pymysql.Error) as e:
             return e

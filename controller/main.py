@@ -13,7 +13,7 @@ def defineToken(idlogin):
     return False, None
 
 def supply_session_id():
-    session_id = ''.join(random.choices(string.digits+string.ascii_uppercase, k=10))
+    session_id = ''.join(random.choices(string.digits+string.ascii_uppercase, k=10)) #USBFDAIB13312
     while session_id in TOKEN:
         session_id = ''.join(random.choices(string.digits+string.ascii_uppercase, k=10))
     return session_id
